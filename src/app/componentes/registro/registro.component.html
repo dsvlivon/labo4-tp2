@@ -67,7 +67,7 @@
             </div>
             
             <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-            
+
             <div *ngIf="mostrarEspecialidad">
                 Especialidad: 
                 <select [(ngModel)]="opcionSeleccionada" (ngModelChange)="seleccionarOpcion()" [ngModelOptions]="{ standalone: true }">
@@ -76,7 +76,9 @@
                     <option value="Nuevo">Nuevo</option>
                 </select>
             </div>
+
             <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            
             <div style="align-items: center; display: flex;">
                 <a href="#" (click)="yaEsUsuario()" style="color: white; width: 100%;" class="link">¿Ya tienes una cuenta? ¡Inicia sesión aquí!</a>                
             </div>
