@@ -1,0 +1,108 @@
+<div class="login-background">
+    <div class= "formulario">
+        <img class="logo" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo">
+        
+        <form [formGroup]="formRegistro" (ngSubmit)="onRegistrar()" class="login-form">
+
+            <div class="mb-3" style="align-items: center; display: flex; width: 80%; margin-left: 25%;">
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="'paciente'" (change)="selectorTipoDeUsuario($event)">
+                    <mat-button-toggle value="paciente">Paciente</mat-button-toggle>
+                    <mat-button-toggle value="especialista">Especialista</mat-button-toggle>
+                    <!-- <mat-button-toggle value="underline">Underline</mat-button-toggle> -->
+                </mat-button-toggle-group>
+            </div>  
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <div class="mb-3">
+                <label class="form-label">Nombre: </label>
+                <input type="text" class="form-control" formControlName="nombre">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Apellido: </label>
+                <input type="text" class="form-control" formControlName="apellido">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Edad: </label>
+                <input type="number" class="form-control" formControlName="edad" min="18" max="100">
+                <div *ngIf="Edad?.invalid && (Edad?.dirty || Edad?.touched)" class="text-danger">
+                    <div *ngIf="Edad?.errors?.['required']">La edad es requerida.</div>
+                    <div *ngIf="Edad?.errors?.['min']">La edad mínima es 18.</div>
+                    <div *ngIf="Edad?.errors?.['max']">La edad máxima es 100.</div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">DNI: </label>
+                <input type="text" class="form-control" formControlName="dni" pattern="^[0-9]{7,8}$">
+                <div *ngIf="Dni?.invalid && (Dni?.dirty || Dni?.touched)" class="text-danger">
+                    <div *ngIf="Dni?.errors?.['required']">El DNI es requerido.</div>
+                    <div *ngIf="Dni?.errors?.['pattern']">El DNI debe ser un número de 7 a 8 dígitos.</div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Obra Social: </label>
+                <input type="text" class="form-control" formControlName="obraSocial">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email: </label>
+                <input type="text" class="form-control" formControlName="email">
+                <div *ngIf="Email?.invalid && (Email?.dirty || Email?.touched)" class="text-danger">
+                    <div *ngIf="Email?.errors?.['required']">El email es requerido.</div>
+                    <div *ngIf="Email?.errors?.['email']">El formato del email no es válido.</div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Foto 1: </label>
+                <input type="text" class="form-control" formControlName="imagen1">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Foto 2: </label>
+                <input type="text" class="form-control" formControlName="imagen2">
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Clave: </label>
+                <input type="password" class="form-control" formControlName="clave">
+            </div>
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <div *ngIf="mostrarEspecialidad">
+                Especialidad: 
+                <select [(ngModel)]="opcionSeleccionada" (ngModelChange)="seleccionarOpcion()" [ngModelOptions]="{ standalone: true }">
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of lista" [value]="item.id">{{ item.especialidad }}</option>
+                    <option value="Nuevo">Nuevo</option>
+                </select>
+            </div>
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <div style="align-items: center; display: flex;">
+                <a href="#" (click)="yaEsUsuario()" style="color: white; width: 100%;" class="link">¿Ya tienes una cuenta? ¡Inicia sesión aquí!</a>                
+            </div>
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <div style="align-items: center; display: flex;">
+                <input type="submit" value="Registrar" class="btn-76">
+            </div>
+            
+        </form>
+  
+        <div *ngIf="mostrarMensaje" style="text-align: center;">
+            <p style="margin-top:20px; color: darkslategrey; text-shadow: 0 0 10px white;">{{mensaje}}</p>
+        </div>
+
+        <div *ngIf="mostrarNuevaEspecialidad">
+            <form [formGroup]="formEspecialidad" (ngSubmit)="onGuardarEspecialidad()" class="nuevo-form">
+              <div class="mb-3">
+                <label class="form-label">NUEVA ESPECIALIDAD: </label>
+                <input type="text" class="form-control2" formControlName="especialidad">
+              </div>
+              <div style="align-items: center; display: flex;">
+                <input type="submit" value="Guardar" class="btn-76" style="margin-right: 5%;">
+              </div>
+            </form>
+          </div>
+
+    </div>
+</div>
+
+

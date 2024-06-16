@@ -1,0 +1,24 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<mat-toolbar class="navbar">
+    <div class="izq">
+        <a (click)="goHome()"><img class="logo scale-up-center" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo"></a>
+        <!-- <a (click)="goHome()"><img class="logo scale-up-center" src="../../../../assets/DV_logo.png" alt="Logo"></a> -->
+        
+    </div>
+    
+    <div class="der">
+        <ul class="nav-links">
+            <li><a (click)="goHome()" title="Home"><mat-icon>home</mat-icon></a></li>
+            <!-- <li><a (click)="goAboutMe()" title="Encuestas"><mat-icon>assessment</mat-icon></a></li> --> 
+            <!-- <li><a (click)="goAboutMe()" title="Sobre Mí"><mat-icon>info</mat-icon></a></li> -->
+            <li><a (click)="goVolver()" title="Volver"><mat-icon>keyboard_backspace</mat-icon></a></li>
+            <li><a (click)="goLogOut()" title="Salir"><mat-icon>open_in_new</mat-icon></a></li> 
+        </ul>
+    </div>
+    
+</mat-toolbar>
+
+<!-- <div class="mostrarSpinner" *ngIf="mostrarSpinner">
+    <mat-spinner></mat-spinner>
+</div> -->
+

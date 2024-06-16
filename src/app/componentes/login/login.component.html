@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+<div class="login-background">
+    <div class= "formulario">
+
+        <div class="accesos-rapidos">
+            <button *ngIf="pacientes[0]" class="btn-foto" (click)="loginRapido(0)">
+              <img *ngIf="pacientes[0]?.imagen1" [src]="pacientes[0]?.imagen1" alt="Paciente 1"></button>
+
+            <button *ngIf="pacientes[1]" class="btn-foto" (click)="loginRapido(1)">
+              <img *ngIf="pacientes[1]?.imagen1" [src]="pacientes[1]?.imagen1" alt="Paciente 2"></button>
+
+            <button *ngIf="pacientes[2]" class="btn-foto" (click)="loginRapido(2)">
+              <img *ngIf="pacientes[2]?.imagen1" [src]="pacientes[2]?.imagen1" alt="Paciente 3"></button>
+
+            <button *ngIf="especialistas[0]" class="btn-foto" (click)="loginRapido(3)">
+              <img *ngIf="especialistas[0]?.imagen1" [src]="especialistas[0]?.imagen1" alt="Especialista 1"></button>
+
+            <button *ngIf="especialistas[1]" class="btn-foto" (click)="loginRapido(4)">
+              <img *ngIf="especialistas[1]?.imagen1" [src]="especialistas[1]?.imagen1" alt="Especialista 2"></button>
+
+            <button *ngIf="admins[0]" class="btn-foto" (click)="loginRapido(5)">
+              <img *ngIf="admins[0]?.imagen1" [src]="admins[0]?.imagen1" alt="Admin"></button>  
+
+          </div>
+          
+          
+          
+        <!-- <img class="logo" src="../../../../assets/DV_logo.png" alt="Logo"> -->
+        <img class="logo" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo">
+        <form [formGroup]="formLogin" (ngSubmit)="onSubmit()" class="login-form" *ngIf="mostrarLogin">
+
+            <div class="mb-3">
+                <label class="form-label">Email: </label>
+                <input type="text" class="form-control" formControlName="email">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Clave: </label>
+                <input type="password" class="form-control" formControlName="clave">
+            </div>
+
+            <div style="align-items: center; display: flex;">
+                <!-- <a href="#" (click)="yaEsUsuario()" style="color: white; width: 100%;" class="link" *ngIf="mostrarRegistro">¿Ya tienes una cuenta? ¡Inicia sesión aquí!</a> -->
+                <a href="#" (click)="yaEsUsuario()" style="color: white; width: 100%;" class="link" *ngIf="mostrarLogin">¿No tienes una cuenta? ¡Regístrate aquí!</a>
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <div style="align-items: center; display: flex;">
+                <input type="submit" value="Ingresar" class="btn-76">
+            </div>
+            
+        </form>
+        <div  *ngIf="mostrarLogin">
+            <button class="btn btn-info btn-google" (click)="onGoogleLogin()" >Login With Google</button>
+        </div>
+
+        <!-- //////////////////////////////////////////////////////////////////////////////////////////////// -->
+        
+
+        <div *ngIf="mostrarMensaje" style="text-align: center;">
+            <p style="margin-top:20px; color: darkslategrey; text-shadow: 0 0 10px white;">{{mensaje}}</p>
+        </div>
+    </div>
+</div>
+
+
