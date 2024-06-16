@@ -8,10 +8,12 @@
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="'paciente'" (change)="selectorTipoDeUsuario($event)">
                     <mat-button-toggle value="paciente">Paciente</mat-button-toggle>
                     <mat-button-toggle value="especialista">Especialista</mat-button-toggle>
-                    <!-- <mat-button-toggle value="underline">Underline</mat-button-toggle> -->
+                    <!-- <mat-button-toggle value="admin">Admin</mat-button-toggle> -->
                 </mat-button-toggle-group>
             </div>  
+
             <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+
             <div class="mb-3">
                 <label class="form-label">Nombre: </label>
                 <input type="text" class="form-control" formControlName="nombre">
@@ -28,8 +30,7 @@
                     <div *ngIf="Edad?.errors?.['min']">La edad mínima es 18.</div>
                     <div *ngIf="Edad?.errors?.['max']">La edad máxima es 100.</div>
                 </div>
-            </div>
-            
+            </div>            
             <div class="mb-3">
                 <label class="form-label">DNI: </label>
                 <input type="text" class="form-control" formControlName="dni" pattern="^[0-9]{7,8}$">
@@ -38,12 +39,6 @@
                     <div *ngIf="Dni?.errors?.['pattern']">El DNI debe ser un número de 7 a 8 dígitos.</div>
                 </div>
             </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Obra Social: </label>
-                <input type="text" class="form-control" formControlName="obraSocial">
-            </div>
-
             <div class="mb-3">
                 <label class="form-label">Email: </label>
                 <input type="text" class="form-control" formControlName="email">
@@ -52,21 +47,27 @@
                     <div *ngIf="Email?.errors?.['email']">El formato del email no es válido.</div>
                 </div>
             </div>
-            
+
+            <div class="mb-3" *ngIf="!  mostrarEspecialidad">
+                <label class="form-label">Obra Social: </label>
+                <input type="text" class="form-control" formControlName="obraSocial">
+            </div>
             <div class="mb-3">
                 <label class="form-label">Foto 1: </label>
                 <input type="text" class="form-control" formControlName="imagen1">
             </div>
-            <div class="mb-3">
+            <div class="mb-3" *ngIf="!  mostrarEspecialidad">
                 <label class="form-label">Foto 2: </label>
                 <input type="text" class="form-control" formControlName="imagen2">
-            </div>
+            </div>       
             
             <div class="mb-3">
                 <label class="form-label">Clave: </label>
                 <input type="password" class="form-control" formControlName="clave">
             </div>
+            
             <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            
             <div *ngIf="mostrarEspecialidad">
                 Especialidad: 
                 <select [(ngModel)]="opcionSeleccionada" (ngModelChange)="seleccionarOpcion()" [ngModelOptions]="{ standalone: true }">

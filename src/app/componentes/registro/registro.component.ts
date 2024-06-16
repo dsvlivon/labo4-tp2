@@ -43,6 +43,7 @@ export class RegistroComponent implements OnInit {
   mostrarEspecialidad: boolean = false;
   especialidades: string[] = Object.values(this.lista);
   opcionSeleccionada: string = '';
+  tipoUsuario = "paciente";
 
   constructor(
     private userService: AuthService,
@@ -55,13 +56,11 @@ export class RegistroComponent implements OnInit {
       apellido: new FormControl(),
       dni: ['', [Validators.required, Validators.pattern(/^[0-9]{7,8}$/)]],
       edad: ['', [Validators.required, Validators.min(18), Validators.max(100)]],
-      obraSocial: new FormControl(),
+      obraSocial: new FormControl(), //NO p/ especialista
       email: ['', [Validators.required, Validators.email]],
       clave: ['', [Validators.required]],
-      rol: new FormControl(),
       imagen1: new FormControl(),
       imagen2: new FormControl(),
-      paciente: new FormControl(),
       especialidad: new FormControl()
     })
 
@@ -70,6 +69,7 @@ export class RegistroComponent implements OnInit {
     });
    
   }
+
 
   get Email() {
     return this.formRegistro.get('email');
@@ -100,24 +100,43 @@ export class RegistroComponent implements OnInit {
   }
 
   onRegistrar() {
-    this.userService.registrar(this.formRegistro.value)
+    if (this.formRegistro.valid) {
+      let obj = { 
+        'nombre': this.formRegistro.value['nombre'] || '',
+        'apellido': this.formRegistro.value['apellido'] || '',
+        'edad': this.formRegistro.value['edad'] || '',
+        'dni': this.formRegistro.value['dni'] || '',
+        'email': this.formRegistro.value['email'] || '',
+        'password': this.formRegistro.value['clave'] || '',
+        'imagen1': this.formRegistro.value['imagen1'] || '',
+        'imagen2': this.formRegistro.value['imagen2'] || '',
+        'obraSocial': this.formRegistro.value['obraSocial'] || '',
+        'estadoAcceso': "pendiente",
+        'tipoUsuario': this.tipoUsuario,
+        'especialidad': this.opcionSeleccionada || ''
+      };
+      this.fireStore.setData(obj, 'usuarios');
+      console.log("Guardar usuario:", obj);
+
+      this.userService.registrar(this.formRegistro.value)
       .then(response => {
         const email = response.user.email || "null";
         localStorage.setItem('user', email);
-        this.fireStore.setData(this.formRegistro.value, 'usuarios');
         this.router.navigate(['/home']);
       })
       .catch((error: any) => this.setMensaje(error, 1));
+    } else {
+      console.log("Form is not valid");
+    }
   }
 
   onGuardarEspecialidad() {
-    const nuevaEspecialidad = this.formEspecialidad.value.especialidad;
-    console.log("Guardar especialidad:", nuevaEspecialidad);
-
+    this.fireStore.setData(this.formEspecialidad.value, 'especialidades');
+    this.opcionSeleccionada = this.formEspecialidad.value.especialidad;
+    console.log("Guardar especialidad:", this.formEspecialidad.value.especialidad);
     this.formEspecialidad.reset();
     this.mostrarNuevaEspecialidad = false;
   }
-
 
   setMensaje(error: any, num: number) {
     this.mostrarMensaje = true;
@@ -156,16 +175,17 @@ export class RegistroComponent implements OnInit {
       this.mostrarEspecialidad = true;
     } else {
         this.mostrarEspecialidad = false;
-    }    
+    }
+    this.tipoUsuario = event.value
   }
 
-    seleccionarOpcion() {
-      // console.log("Opción seleccionada:", this.opcionSeleccionada);
-      if(this.opcionSeleccionada == "Nuevo") {
-        this.mostrarNuevaEspecialidad = true;
-      } else {
-        this.mostrarNuevaEspecialidad = false;
-      }
+  seleccionarOpcion() {
+    // console.log("Opción seleccionada:", this.opcionSeleccionada);
+    if(this.opcionSeleccionada == "Nuevo") {
+      this.mostrarNuevaEspecialidad = true;
+    } else {
+      this.mostrarNuevaEspecialidad = false;
     }
+  }
 }
   
