@@ -1,0 +1,30 @@
+mat-grid-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .peli-pic {
+    width: auto;
+    height: 100px; 
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+   
+    text-align: center;
+  }
+  
+  .peli-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  th{
+    background-color: rgb(101, 149, 189)
+  }
+  

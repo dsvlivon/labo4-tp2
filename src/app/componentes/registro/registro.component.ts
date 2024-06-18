@@ -44,6 +44,7 @@ export class RegistroComponent implements OnInit {
   especialidades: string[] = Object.values(this.lista);
   opcionSeleccionada: string = '';
   tipoUsuario = "paciente";
+  estadoAcceso = "aprobado";
 
   constructor(
     private userService: AuthService,
@@ -67,9 +68,7 @@ export class RegistroComponent implements OnInit {
     this.formEspecialidad = this.formBuilder.group({
       especialidad: ['', Validators.required]
     });
-   
   }
-
 
   get Email() {
     return this.formRegistro.get('email');
@@ -118,11 +117,13 @@ export class RegistroComponent implements OnInit {
           'imagen1': this.formRegistro.value['imagen1'] || '',
           'imagen2': this.formRegistro.value['imagen2'] || '',
           'obraSocial': this.formRegistro.value['obraSocial'] || '',
-          'estadoAcceso': "pendiente",
+          'estadoAcceso': this.estadoAcceso,
           'tipoUsuario': this.tipoUsuario,
           'especialidad': this.opcionSeleccionada || ''
         };
         this.fireStore.setData(obj, 'usuarios');
+        
+        localStorage.setItem('user', this.formRegistro.value['email']);
         console.log("Guardar usuario:", obj);
         this.router.navigate(['/home']);
       }, 1500);
@@ -172,10 +173,12 @@ export class RegistroComponent implements OnInit {
   selectorTipoDeUsuario(event: any) {
     if( event.value == "especialista") {
       this.mostrarEspecialidad = true;
+      this.estadoAcceso = "pendiente";
     } else {
         this.mostrarEspecialidad = false;
+        this.estadoAcceso = "aprobado";
     }
-    this.tipoUsuario = event.value
+    this.tipoUsuario = event.value;
   }
 
   seleccionarOpcion() {

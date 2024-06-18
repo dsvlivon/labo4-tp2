@@ -24,7 +24,7 @@ import { Usuario } from '../../models/usuarios.interface';
 export class LoginComponent implements OnInit {
   email: string = "";
   clave: string = "";
-
+  usuario: any;
   mostrarLogin: boolean = true;
   mostrarRegistro: boolean = !this.mostrarLogin;
   mostrarMensaje: boolean = false;
@@ -110,9 +110,18 @@ export class LoginComponent implements OnInit {
       .then((response: any) => {
         const email = response.user.email;
         localStorage.setItem('user', email);
+        // console.log("data log: ", this.usuario)
         this.router.navigate(['/home']);
       })
       .catch(error => this.setMensaje(error, 2));
+  }
+
+  fetchUser(mail:string){
+    this.lista.forEach(user => { 
+      if(user.email == mail) { 
+        this.usuario= user;
+        console.log("data log: ", this.usuario);
+      }});
   }
 
   onGoogleLogin() {

@@ -72,7 +72,7 @@
                 Especialidad: 
                 <select [(ngModel)]="opcionSeleccionada" (ngModelChange)="seleccionarOpcion()" [ngModelOptions]="{ standalone: true }">
                     <option value="">Selecciona una opción</option>
-                    <option *ngFor="let item of lista" [value]="item.id">{{ item.especialidad }}</option>
+                    <option *ngFor="let item of lista" [value]="item.especialidad">{{ item.especialidad }}</option>
                     <option value="Nuevo">Nuevo</option>
                 </select>
             </div>

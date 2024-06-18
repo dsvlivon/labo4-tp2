@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { collectionData, Firestore, addDoc, collection, deleteDoc, doc, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { query, where } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +17,7 @@ export class FirebaseService {
     const col = collection(this.fireStore, coleccion);
     addDoc(col, obj);
   }
-
-  obtenerUsuarios(): Observable<any[]> {
-    const usuarios = collection(this.fireStore, 'usuarios');
-    return collectionData(usuarios) as Observable<any[]>;
-  }  
-
+ 
   obtenerDatoSinId(coleccion: string): Observable<any[]> {
     const lista = collection(this.fireStore, coleccion);
     console.log("obtenerDatoSinId conteo: ", lista);
@@ -34,17 +30,21 @@ export class FirebaseService {
     return collectionData(lista, { idField: 'id' }) as Observable<any[]>;
   }
 
-  actualizarPelicula(id: string, nombre: string, tipo: string, fechaEstreno: string, cantidadPublico: number, foto: string, actor: string) {
-    const dataRef = doc(this.fireStore, 'peliculas', id);
+  obtenerDatoPorCriterio(coleccion: string, criterio: string, index: string): Observable<any[]> {
+    //obtenerDatoPorCriterio('usuarios', 'email', value);
+    const col = collection(this.fireStore, coleccion);
+    const q = query(col, where(criterio, '==', index));
+    return collectionData(q, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  actualizarObj(coleccion:string ,id: string, estadoAcceso: string) {
+    const dataRef = doc(this.fireStore, coleccion, id);
     updateDoc(dataRef, {
-      nombre,
-      tipo,
-      fechaEstreno,
-      cantidadPublico,
-      foto,
-      actor
+      estadoAcceso
     });
   }
+
+  
 
   deleteDato(obj: any, collection: string) {
     const docRef = doc(this.fireStore, collection, obj.id);

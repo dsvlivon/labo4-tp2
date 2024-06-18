@@ -1,0 +1,58 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="Foto">
+        <th mat-header-cell *matHeaderCellDef> Foto </th>
+        <td mat-cell *matCellDef="let obj">
+            <img [src]="obj.imagen1" alt="{{obj.nombre}}" class="peli-pic">
+        </td>
+    </ng-container>
+              
+    <ng-container matColumnDef="Tipo de Usuario">
+        <th mat-header-cell *matHeaderCellDef> Tipo de Usuario </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.tipoUsuario}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Apellido">
+        <th mat-header-cell *matHeaderCellDef> Apellido </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.apellido}} </td>
+    </ng-container>
+        
+    <ng-container matColumnDef="Nombre">
+        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.nombre}} </td>
+    </ng-container>
+      
+    <ng-container matColumnDef="Dni">
+        <th mat-header-cell *matHeaderCellDef> Dni </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.dni}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Edad">
+      <th mat-header-cell *matHeaderCellDef> Edad </th>
+      <td mat-cell *matCellDef="let obj"> {{obj.edad}} </td>
+    </ng-container>  
+  
+    <ng-container matColumnDef="Email">
+      <th mat-header-cell *matHeaderCellDef> email </th>
+      <td mat-cell *matCellDef="let obj"> {{obj.email}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Estado Acceso">
+        <th mat-header-cell *matHeaderCellDef> Estado Acceso </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.estadoAcceso}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Obra Social">
+        <th mat-header-cell *matHeaderCellDef> Obra Social </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.obraSocial}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="Especialidad">
+        <th mat-header-cell *matHeaderCellDef> Especialidad </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.especialidad}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let obj; columns: displayedColumns;" (click)="emitirDetalles(obj)"></tr>
+</table>
+
+<app-detalle [obj]="selectedUsuario" *ngIf="mostrarDetalle"></app-detalle>

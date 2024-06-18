@@ -1,1 +1,29 @@
-<p>home works!</p>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<mat-toolbar class="navbar">
+    <div class="izq">
+        <a (click)="goHome()"><img class="logo scale-up-center" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo"></a>
+        <!-- <a (click)="goHome()"><img class="logo scale-up-center" src="../../../../assets/DV_logo.png" alt="Logo"></a> -->
+        
+    </div>
+    
+    <div class="der">
+        <ul class="nav-links">
+            <li><a (click)="goHabilitar()" title="Habilitar Usuaruis" *ngIf="esAdmin"><mat-icon>assignment</mat-icon></a></li>
+            <li><a (click)="goHome()" title="Home" *ngIf="!mostrarConfirmacion" ><mat-icon>home</mat-icon></a></li>
+            <!-- <li><a (click)="goVolver()" title="Volver" *ngIf="!mostrarConfirmacion"><mat-icon>keyboard_backspace</mat-icon></a></li> -->
+            <li><a (click)="goLogOut()" title="Salir"><mat-icon>open_in_new</mat-icon></a></li> 
+        </ul>
+    </div>
+    
+</mat-toolbar>
+
+<div *ngIf="mostrarHabilitar">
+    <app-habilitar-usuarios></app-habilitar-usuarios>
+</div>
+
+
+<div class="home-background">
+    <div *ngIf="mostrarConfirmacion" class="confirmation-message">
+      No puede realizar otras acciones hasta que su perfil sea habilitado por un Administrador.
+    </div>
+</div>
