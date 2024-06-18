@@ -123,9 +123,9 @@ export class RegistroComponent implements OnInit {
         };
         this.fireStore.setData(obj, 'usuarios');
         
-        localStorage.setItem('user', this.formRegistro.value['email']);
+        // localStorage.setItem('user', this.formRegistro.value['email']);
         console.log("Guardar usuario:", obj);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/login']);
       }, 1500);
     }
   }
