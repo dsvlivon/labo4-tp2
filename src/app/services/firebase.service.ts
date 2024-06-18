@@ -44,7 +44,9 @@ export class FirebaseService {
     });
   }
 
-  
+  // obtenerDatoPorCriterio2(collection: string, field: string, value: any): Observable<any[]> {
+  //   return this.fireStore.collection(collection, ref => ref.where(field, '==', value)).valueChanges();
+  // }  
 
   deleteDato(obj: any, collection: string) {
     const docRef = doc(this.fireStore, collection, obj.id);

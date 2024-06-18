@@ -4,6 +4,7 @@ import { HomeComponent } from './componentes/home/home.component';
 import { RegistroComponent } from './componentes/registro/registro.component';
 import { BienvenidoComponent } from './componentes/bienvenido/bienvenido.component';
 import { HabilitarUsuariosComponent } from './componentes/habilitar-usuarios/habilitar-usuarios.component';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
     { path: 'bienvenido', component: BienvenidoComponent },
@@ -12,5 +13,5 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'home', component: HomeComponent },
     { path: 'registro', component: RegistroComponent },
-    { path: 'habilitar', component: HabilitarUsuariosComponent }
+    { path: 'habilitar-usuarios', component: HabilitarUsuariosComponent, canActivate: [adminGuard] },
 ];

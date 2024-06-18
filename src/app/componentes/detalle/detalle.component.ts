@@ -27,6 +27,7 @@ export class DetalleComponent implements OnChanges {
   }
 
   habilitar() {
+    // alert("asdasd");
     if (this.obj && this.obj.id) {
       this.fireStore.actualizarObj('usuarios', this.obj.id, 'aprobado');
       console.log("Usuario habilitado!");

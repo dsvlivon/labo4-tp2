@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit{
       this.mostrarSpinner = false;
       console.log("spinner: ", this.mostrarSpinner)
       this.router.navigateByUrl('bienvenido', { replaceUrl: true})
-    }, 3000);
+    }, 1500);
   }
   
   goHome() { 
