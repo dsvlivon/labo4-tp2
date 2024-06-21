@@ -1,14 +1,20 @@
 <div class="login-background">
-    <div class= "formulario">
+    <div class="formulario">
         <img class="logo" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo">
         
         <form [formGroup]="formRegistro" (ngSubmit)="onRegistrar()" class="login-form">
-
-            <div class="mb-3" style="align-items: center; display: flex; width: 80%; margin-left: 25%;">
+            <div class="mb-3" style="align-items: center; display: flex; width: 80%; margin-left: 25%;" *ngIf="!esAdmin">
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="'paciente'" (change)="selectorTipoDeUsuario($event)">
                     <mat-button-toggle value="paciente">Paciente</mat-button-toggle>
                     <mat-button-toggle value="especialista">Especialista</mat-button-toggle>
-                    <!-- <mat-button-toggle value="admin">Admin</mat-button-toggle> -->
+                </mat-button-toggle-group>
+            </div>
+
+            <div class="mb-3" style="align-items: center; display: flex; width: 80%; margin-left: 25%;" *ngIf="esAdmin">
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="'paciente'" (change)="selectorTipoDeUsuario($event)">
+                    <mat-button-toggle value="paciente">Paciente</mat-button-toggle>
+                    <mat-button-toggle value="especialista">Especialista</mat-button-toggle>
+                    <mat-button-toggle value="admin">Admin</mat-button-toggle>
                 </mat-button-toggle-group>
             </div>  
 
@@ -48,15 +54,17 @@
                 </div>
             </div>
 
-            <div class="mb-3" *ngIf="!  mostrarEspecialidad">
+            <div class="mb-3" *ngIf="mostrarObraSocial">
                 <label class="form-label">Obra Social: </label>
                 <input type="text" class="form-control" formControlName="obraSocial">
             </div>
+            
             <div class="mb-3">
                 <label class="form-label">Foto 1: </label>
                 <input type="text" class="form-control" formControlName="imagen1">
             </div>
-            <div class="mb-3" *ngIf="!  mostrarEspecialidad">
+            
+            <div class="mb-3" *ngIf="mostrarFoto2">
                 <label class="form-label">Foto 2: </label>
                 <input type="text" class="form-control" formControlName="imagen2">
             </div>       
@@ -82,6 +90,7 @@
             <div style="align-items: center; display: flex;">
                 <a href="#" (click)="yaEsUsuario()" style="color: white; width: 100%;" class="link">¿Ya tienes una cuenta? ¡Inicia sesión aquí!</a>                
             </div>
+
             <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
             <div style="align-items: center; display: flex;">
                 <input type="submit" value="Registrar" class="btn-76">
@@ -103,9 +112,6 @@
                 <input type="submit" value="Guardar" class="btn-76" style="margin-right: 5%;">
               </div>
             </form>
-          </div>
-
+        </div>
     </div>
 </div>
-
-

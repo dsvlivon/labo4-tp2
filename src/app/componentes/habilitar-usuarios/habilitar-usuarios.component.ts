@@ -8,19 +8,21 @@ import { CommonModule } from '@angular/common';
 import { Usuario } from '../../models/usuarios.interface';
 import { FirebaseService } from '../../services/firebase.service';
 import { DetalleComponent } from '../detalle/detalle.component';
+import { EstadoAccesoDirective } from '../../directivas/estado-acceso.directive';
 
 
 @Component({
   selector: 'app-habilitar-usuarios',
   standalone: true,
-  imports: [MatGridListModule, MatIconModule, MatGridListModule, CommonModule, MatTableModule, DetalleComponent],
+  imports: [MatGridListModule, MatIconModule, MatGridListModule, CommonModule, MatTableModule, DetalleComponent, EstadoAccesoDirective],
   templateUrl: './habilitar-usuarios.component.html',
   styleUrls: ['./habilitar-usuarios.component.css']
 })
 export class HabilitarUsuariosComponent implements OnInit {
   @Output() peliculaSeleccionada = new EventEmitter<any>();
-  displayedColumns: string[] = ['Foto', 'Tipo de Usuario', 'Apellido', 'Nombre', 'Dni', 'Edad', 'Email', 'Estado Acceso', 'Obra Social', 'Especialidad'];
+  displayedColumns: string[] = ['Foto', 'Tipo de Usuario', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Estado Acceso', 'Obra Social', 'Especialidad'];
   lista: Usuario[] = [];
+  lista2: Usuario[] = [];
   dataSource: Usuario[] = [];
   selectedUsuario: Usuario | null = null;
   mostrarDetalle: boolean = false;
@@ -37,10 +39,18 @@ export class HabilitarUsuariosComponent implements OnInit {
             usuario.imagen1 = this.arreglarImagenes(usuario.imagen1);
           }
           return usuario;
-        }) //aplicar Criterios de filtros -> logica de codigo (la otra opcion es pasar criterios a la query p usar el motor del sql d fb)
-        .filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'pendiente');
-      
+          }).filter(usuario => usuario.tipoUsuario === 'especialista' || usuario.tipoUsuario === 'admin');
+      //aplicar Criterios de filtros -> logica de codigo (la otra opcion es pasar criterios a la query p usar el motor del sql d fb)
       this.dataSource = this.lista;
+
+      this.lista2 = respuesta
+      .map(usuario => {
+        if (usuario.imagen1) {
+          usuario.imagen1 = this.arreglarImagenes(usuario.imagen1);
+        }
+        return usuario;
+        }).filter(usuario => usuario.tipoUsuario === 'paciente');
+      // this.dataSource2 = this.lista;
     });
   }
   

@@ -3,17 +3,29 @@
     <span class="close" (click)="cerrarModal()">&times;</span>
     <h2>Detalles del Especialista</h2>
     <h3><strong>Estado:</strong> {{ obj.estadoAcceso }}</h3>
-    <div *ngIf="obj" style="background-color: rgb(154, 214, 238); border-radius: 1%; padding: 5%;">
-      <p><strong>Nombre:</strong> {{ obj.nombre }}</p>
-      <p><strong>Apellido:</strong> {{ obj.apellido }}</p>
-      <p><strong>Email:</strong> {{ obj.email }}</p>
-      <p><strong>Especialidad:</strong> {{ obj.especialidad }}</p>
-      <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-      <!-- <p style="font-size: x-large;"><strong>Estado:</strong> {{ obj.estadoAcceso }}</p> -->
-      
+    <div *ngIf="obj" class="detalle-container">
+      <div class="img-container">
+        <img [src]="obj.imagen1" alt="{{obj.nombre}}" class="obj-pic">
+      </div>
+      <div class="info-container">
+        <p><strong>Nombre:</strong> {{ obj.nombre }}</p>
+        <p><strong>Apellido:</strong> {{ obj.apellido }}</p>
+        <p><strong>Email:</strong> {{ obj.email }}</p>
+        <p><strong>Especialidad:</strong> {{ obj.especialidad }}</p>
+        <p><strong>Obra Social:</strong> {{ obj.obraSocial }}</p>
+        <p><strong>Mail:</strong> {{ obj.email }}</p>
+      </div>
     </div>
+
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-    <button class="btn-76" (click)="habilitar()">Habilitar</button>
+      
+    <div *ngIf="mostrarHabilitar">
+      <button class="btn-76" (click)="habilitar()">Habilitar</button>
+    </div>
+    <div *ngIf="mostrarDeshabilitar">
+      <button class="btn-76" (click)="Deshabilitar()">Desabilitar</button>
+    </div>
+
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
   </div>
 </div>

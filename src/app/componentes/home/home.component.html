@@ -1,14 +1,17 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <mat-toolbar class="navbar">
     <div class="izq">
-        <a (click)="goHome()"><img class="logo scale-up-center" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo"></a>
-        <!-- <a (click)="goHome()"><img class="logo scale-up-center" src="../../../../assets/DV_logo.png" alt="Logo"></a> -->
-        
+        <a (click)="goHome()"><img class="logo scale-up-center" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo"></a>       
+    </div>
+
+    <div style= "align-items: right; ; margin-left: 40%; margin-top:1%; display: flex; flex-direction: flex-end; font-style: italic; color: darkblue; font-size: medium;">
+        <p >Hola {{this.usuario.nombre}} {{this.usuario.apellido}}</p>
     </div>
     
     <div class="der">
         <ul class="nav-links">
-            <li><a (click)="goHabilitar()" title="Habilitar Usuaruis" *ngIf="esAdmin"><mat-icon>assignment</mat-icon></a></li>
+            <li><a (click)="goRegistro()" title="Alta de Usaurios" *ngIf="esAdmin"><mat-icon>add_circle_outline</mat-icon></a></li>
+            <li><a (click)="goUsuarios()" title="Usuaruis" *ngIf="esAdmin"><mat-icon>supervisor_account</mat-icon></a></li>
             <li><a (click)="goHome()" title="Home" *ngIf="!mostrarConfirmacion" ><mat-icon>home</mat-icon></a></li>
             <!-- <li><a (click)="goVolver()" title="Volver" *ngIf="!mostrarConfirmacion"><mat-icon>keyboard_backspace</mat-icon></a></li> -->
             <li><a (click)="goLogOut()" title="Salir"><mat-icon>open_in_new</mat-icon></a></li> 
@@ -19,6 +22,10 @@
 
 <div *ngIf="mostrarHabilitar">
     <app-habilitar-usuarios></app-habilitar-usuarios>
+</div>
+
+<div *ngIf="mostrarRegistro">
+    <app-registro></app-registro>
 </div>
 
 

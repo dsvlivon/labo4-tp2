@@ -26,12 +26,11 @@ enum TipoRol {
   styleUrl: './registro.component.css'
 })
 export class RegistroComponent implements OnInit {
-  email: string = "";
+  email: any = "";
   clave: string = "";
+  usuario: any;
   checked: boolean = false;
   checked2: boolean = false;
-  mostrarNuevaEspecialidad: boolean = false;
-  mostrarMensaje: boolean = false;
   mensaje: string = "";
   formRegistro: FormGroup;
   formEspecialidad: FormGroup;
@@ -39,12 +38,19 @@ export class RegistroComponent implements OnInit {
   validationFormUser: FormGroup = new FormGroup({});
   rol: TipoRol = TipoRol.Otros;
   tiposRol: string[] = Object.values(TipoRol);
-  lista: any[] = [];
-  mostrarEspecialidad: boolean = false;
+  lista: any[] = []; 
   especialidades: string[] = Object.values(this.lista);
   opcionSeleccionada: string = '';
   tipoUsuario = "paciente";
   estadoAcceso = "aprobado";
+
+  mostrarNuevaEspecialidad: boolean = false;
+  mostrarMensaje: boolean = false;
+  esAdmin: boolean = false;
+  
+  mostrarEspecialidad: boolean = false;
+  mostrarObraSocial: boolean = true;
+  mostrarFoto2: boolean = true;
 
   constructor(
     private userService: AuthService,
@@ -81,7 +87,6 @@ export class RegistroComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.mostrarEspecialidad = false;
     this.getDatos();
   }
 
@@ -90,6 +95,19 @@ export class RegistroComponent implements OnInit {
       this.lista = respuesta;
       console.log("especialidades: ", this.lista);
     });
+
+    this.email = localStorage.getItem('user');
+    console.log('user', this.email);
+    this.fireStore.obtenerDatoPorCriterio('usuarios', 'email', this.email).subscribe(data => {
+      this.usuario = data[0];
+      if (this.usuario) {
+        if(this.usuario.tipoUsuario === 'admin') {
+          this.esAdmin = true;
+          // this.mostrarAdmin = true;
+          console.log("esAdminx:", this.esAdmin );
+        }
+      }
+    }); 
   }
 
   yaEsUsuario() {
@@ -99,13 +117,20 @@ export class RegistroComponent implements OnInit {
   }
 
   onRegistrar() {
-    if (this.formRegistro.valid) {
-      this.userService.registrar(this.formRegistro.value).then(response => {
-        const email = response.user.email || "null";
-        localStorage.setItem('user', email);
-        
-      }).catch((error: any) => this.setMensaje(error, 1));   
-      
+    if (this.formRegistro.valid) { 
+      //solo estoy aplicando verificacion de mail al especialista, esta bien?
+      if(this.tipoUsuario == "especialista"){
+        this.userService.registrarConVerificacion(this.formRegistro.value).then(response => {
+          const email = response.user.email || "null";
+          localStorage.setItem('user', email);          
+        }).catch((error: any) => this.setMensaje(error, 1));
+      } else {
+        this.userService.registrar(this.formRegistro.value).then(response => {
+          const email = response.user.email || "null";
+          localStorage.setItem('user', email);  
+        }).catch((error: any) => this.setMensaje(error, 1));    
+      }
+
       setTimeout(() => {
         let obj = { 
           'nombre': this.formRegistro.value['nombre'] || '',
@@ -121,12 +146,15 @@ export class RegistroComponent implements OnInit {
           'tipoUsuario': this.tipoUsuario,
           'especialidad': this.opcionSeleccionada || ''
         };
-        this.fireStore.setData(obj, 'usuarios');
-        
+        this.fireStore.setData(obj, 'usuarios');   
         // localStorage.setItem('user', this.formRegistro.value['email']);
         console.log("Guardar usuario:", obj);
-        this.router.navigate(['/login']);
-      }, 1500);
+        if(!this.esAdmin) {
+          // this.router.navigate(['/login']);
+        } else {
+          alert("Usuario creado!")
+        }
+      }, 1500);      
     }
   }
 
@@ -171,13 +199,25 @@ export class RegistroComponent implements OnInit {
   }
 
   selectorTipoDeUsuario(event: any) {
-    if( event.value == "especialista") {
-      this.mostrarEspecialidad = true;
+    console.log("tipoUsuario: ", event.value);
+    
+    if (event.value == "especialista") {
       this.estadoAcceso = "pendiente";
+      this.mostrarEspecialidad = true;
+      this.mostrarFoto2 = false;
+      this.mostrarObraSocial = false;
+    } else if (event.value == "admin") {
+      this.estadoAcceso = "aprobado";
+      this.mostrarEspecialidad = false;
+      this.mostrarFoto2 = false;
+      this.mostrarObraSocial = false;
     } else {
-        this.mostrarEspecialidad = false;
-        this.estadoAcceso = "aprobado";
+      this.estadoAcceso = "aprobado";
+      this.mostrarEspecialidad = false;
+      this.mostrarFoto2 = true;
+      this.mostrarObraSocial = true;
     }
+    
     this.tipoUsuario = event.value;
   }
 

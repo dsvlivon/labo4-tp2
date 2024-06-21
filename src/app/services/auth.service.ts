@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, GoogleAuthProvider } from '@angular/fire/auth';
 import { addDoc, collection, collectionData, Firestore } from '@angular/fire/firestore';
-import { sendEmailVerification } from 'firebase/auth';
+import { User, sendEmailVerification } from 'firebase/auth';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 
@@ -17,22 +17,16 @@ export class AuthService {
   
   constructor(private auth: Auth) {}
 
-  async registrar({ email, clave }: any) {
+  async registrarConVerificacion({ email, clave }: any) {
     try {
-      // Create the user
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, clave);
-
-      // Get the current user
       const user = this.auth.currentUser;
 
-      // Send email verification
       if (user) {
         await sendEmailVerification(user);
-        alert("Su usuario ha sido creado con exito! \nPor favor verifique en su casilla de correo el mail de verificación.");
+        alert("Su usuario ha sido creado con éxito! \nPor favor, verifique en su casilla de correo el mail de verificación.");
         signOut(this.auth);
-      }
-
-      
+      }    
 
       return userCredential;
     } catch (error) {
@@ -41,10 +35,12 @@ export class AuthService {
     }
   }
 
+  registrar({email, clave}: any){
+    return createUserWithEmailAndPassword(this.auth, email, clave)
+  }
+
   login({ email, clave }: any) {
-    let x = signInWithEmailAndPassword(this.auth, email, clave); 
-    // console.log(x);
-    return x;
+    return signInWithEmailAndPassword(this.auth, email, clave);
   }
 
   setAuth(auth:Auth){
@@ -54,8 +50,9 @@ export class AuthService {
   getAuth (){
     return this.auth;
   }
-  getCurrentUser (){
-    return this.auth.currentUser  ;
+
+  getCurrentUser(): User | null {
+    return this.auth.currentUser;
   }
 
   loginWithGoogle() {
@@ -63,14 +60,9 @@ export class AuthService {
   }
 
   logout() {
+    localStorage.removeItem('user');
     return signOut(this.auth);
   }
 
-  getUser() {
-    let localstorage = localStorage.getItem('user');
-    if( localstorage != null) {
-      return JSON.parse(localstorage);
-    }
-  }
 
 }

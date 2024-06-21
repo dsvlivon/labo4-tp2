@@ -8,17 +8,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
 import { HabilitarUsuariosComponent } from '../habilitar-usuarios/habilitar-usuarios.component';
+import { RegistroComponent } from '../registro/registro.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent],
+  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent, RegistroComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit{
   mostrarConfirmacion: boolean = true;
-  mostrarHabilitar: boolean = false
+  mostrarHabilitar: boolean = false;
+  mostrarRegistro: boolean = false;
   esAdmin: boolean = false;
   email: any;
   usuario: any;
@@ -69,7 +71,15 @@ export class HomeComponent implements OnInit{
     this.router.navigateByUrl('/home', { replaceUrl: true });
   }
 
-  goHabilitar() {
+  goUsuarios() {
    this.mostrarHabilitar = !this.mostrarHabilitar;
+   this.mostrarRegistro = !this.mostrarHabilitar;
   }
+
+  goRegistro() {
+    // this.router.navigateByUrl('/registro', { replaceUrl: true });
+    this.mostrarRegistro = !this.mostrarRegistro;
+    this.mostrarHabilitar = !this.mostrarRegistro;
+  }
+ 
 }
