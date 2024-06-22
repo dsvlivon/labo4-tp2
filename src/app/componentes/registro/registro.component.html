@@ -60,12 +60,17 @@
             </div>
             
             <div class="mb-3">
+                <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
                 <label class="form-label">Foto 1: </label>
+                <input type="file" (change)="onFileChange($event, 'imagen1')">
+                <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
                 <input type="text" class="form-control" formControlName="imagen1">
             </div>
             
             <div class="mb-3" *ngIf="mostrarFoto2">
                 <label class="form-label">Foto 2: </label>
+                <input type="file" (change)="onFileChange($event, 'imagen2')">
+                <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
                 <input type="text" class="form-control" formControlName="imagen2">
             </div>       
             
@@ -101,6 +106,10 @@
         <div *ngIf="mostrarMensaje" style="text-align: center;">
             <p style="margin-top:20px; color: darkslategrey; text-shadow: 0 0 10px white;">{{mensaje}}</p>
         </div>
+
+        <!-- <div>
+            <input type="file" (change)="onFileChange($event)">
+        </div> -->
 
         <div *ngIf="mostrarNuevaEspecialidad">
             <form [formGroup]="formEspecialidad" (ngSubmit)="onGuardarEspecialidad()" class="nuevo-form">

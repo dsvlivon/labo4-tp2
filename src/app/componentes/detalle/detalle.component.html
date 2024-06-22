@@ -4,17 +4,20 @@
     <h2>Detalles del Especialista</h2>
     <h3><strong>Estado:</strong> {{ obj.estadoAcceso }}</h3>
     <div *ngIf="obj" class="detalle-container">
+
       <div class="img-container">
         <img [src]="obj.imagen1" alt="{{obj.nombre}}" class="obj-pic">
       </div>
+
       <div class="info-container">
-        <p><strong>Nombre:</strong> {{ obj.nombre }}</p>
-        <p><strong>Apellido:</strong> {{ obj.apellido }}</p>
-        <p><strong>Email:</strong> {{ obj.email }}</p>
-        <p><strong>Especialidad:</strong> {{ obj.especialidad }}</p>
-        <p><strong>Obra Social:</strong> {{ obj.obraSocial }}</p>
-        <p><strong>Mail:</strong> {{ obj.email }}</p>
+        <p>Nombre: {{ obj.nombre }}</p>
+        <p>Apellido: {{ obj.apellido }}</p>
+        <p>Email: {{ obj.email }}</p>
+        <p>Especialidad: {{ obj.especialidad }}</p>
+        <p>Obra Social: {{ obj.obraSocial }}</p>
+        <p>Mail: {{ obj.email }}</p>
       </div>
+
     </div>
 
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->

@@ -6,6 +6,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { CloudStorageService } from '../../services/cloud-storage.service';
 
 enum TipoRol {
   admin = 'admin',
@@ -44,6 +45,7 @@ export class RegistroComponent implements OnInit {
   tipoUsuario = "paciente";
   estadoAcceso = "aprobado";
 
+
   mostrarNuevaEspecialidad: boolean = false;
   mostrarMensaje: boolean = false;
   esAdmin: boolean = false;
@@ -51,12 +53,15 @@ export class RegistroComponent implements OnInit {
   mostrarEspecialidad: boolean = false;
   mostrarObraSocial: boolean = true;
   mostrarFoto2: boolean = true;
+  imageUrl: string = "";
+  
 
   constructor(
     private userService: AuthService,
     private router: Router,
     public formBuilder: FormBuilder,
-    private fireStore: FirebaseService
+    private fireStore: FirebaseService,
+    private cloudStorage: CloudStorageService
   ) {
     this.formRegistro = this.formBuilder.group({
       nombre: new FormControl(),
@@ -91,6 +96,7 @@ export class RegistroComponent implements OnInit {
   }
 
   getDatos() {
+    // this.getImagen('perfiles', 'prueba');
     this.fireStore.obtenerDato('especialidades').subscribe(respuesta => {
       this.lista = respuesta;
       console.log("especialidades: ", this.lista);
@@ -118,8 +124,8 @@ export class RegistroComponent implements OnInit {
 
   onRegistrar() {
     if (this.formRegistro.valid) { 
-      //solo estoy aplicando verificacion de mail al especialista, esta bien?
-      if(this.tipoUsuario == "especialista"){
+      //solo estoy aplicando verificacion de mail al paciente, esta bien?
+      if(this.tipoUsuario == "paciente"){
         this.userService.registrarConVerificacion(this.formRegistro.value).then(response => {
           const email = response.user.email || "null";
           localStorage.setItem('user', email);          
@@ -150,7 +156,7 @@ export class RegistroComponent implements OnInit {
         // localStorage.setItem('user', this.formRegistro.value['email']);
         console.log("Guardar usuario:", obj);
         if(!this.esAdmin) {
-          // this.router.navigate(['/login']);
+          this.router.navigate(['/login']);
         } else {
           alert("Usuario creado!")
         }
@@ -228,6 +234,40 @@ export class RegistroComponent implements OnInit {
     } else {
       this.mostrarNuevaEspecialidad = false;
     }
+  }
+
+  async onFileChange(event: any, img: string) {
+    let codigo = this.generarCodigoAleatorio();
+    console.log("codigo: ", codigo)
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        this.imageUrl = await this.cloudStorage.subirImagenAsync("perfiles", codigo, file);
+        console.log("url subido: ", this.imageUrl);
+        this.formRegistro.patchValue({[img]: this.imageUrl});
+      } catch (error) {
+        console.error('Error al subir la imagen:', error);
+      }
+    }
+  }
+  
+  async getImagen(carpeta: string, nombre: string) {
+    try {
+      this.imageUrl = await this.cloudStorage.getImagenAsync(carpeta, nombre);
+      console.log('URL de la imagen:', this.imageUrl);
+    } catch (error) {
+      console.error('Error al obtener la imagen:', error);
+    }
+  }
+
+  generarCodigoAleatorio(): string {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let codigo = '';
+    for (let i = 0; i < 10; i++) {
+      const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+      codigo += caracteres.charAt(indiceAleatorio);
+    }
+    return codigo;
   }
 }
   

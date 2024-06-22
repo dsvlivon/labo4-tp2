@@ -20,7 +20,8 @@ import { EstadoAccesoDirective } from '../../directivas/estado-acceso.directive'
 })
 export class HabilitarUsuariosComponent implements OnInit {
   @Output() peliculaSeleccionada = new EventEmitter<any>();
-  displayedColumns: string[] = ['Foto', 'Tipo de Usuario', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Estado Acceso', 'Obra Social', 'Especialidad'];
+  displayedColumnasPacientes: string[] = [ 'Estado Acceso', 'Tipo de Usuario', 'Foto', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Obra Social'];
+  displayedColumnasEspecialista: string[] = [ 'Estado Acceso', 'Tipo de Usuario', 'Foto', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Especialidad'];
   lista: Usuario[] = [];
   lista2: Usuario[] = [];
   dataSource: Usuario[] = [];
