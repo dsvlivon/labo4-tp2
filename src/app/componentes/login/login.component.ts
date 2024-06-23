@@ -7,17 +7,12 @@ import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Usuario } from '../../models/usuarios.interface';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatCheckboxModule,
-    NavbarComponent
-  ],
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule, MatCheckboxModule, NavbarComponent, SpinnerComponent ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -25,20 +20,21 @@ export class LoginComponent implements OnInit {
   email: string = "";
   clave: string = "";
   usuario: any;
-  mostrarLogin: boolean = true;
-  mostrarRegistro: boolean = !this.mostrarLogin;
-  mostrarMensaje: boolean = false;
   mensaje: string = "";
   formLogin: FormGroup;
   validationUserMessage = { type: 'errorType', message: 'El email es incorrecto. Pruebe nuevamente' }
   validationFormUser: FormGroup = new FormGroup({});
   lista: Usuario[] = [];
-  mostrarEspecialidad: boolean = false;
   dataSource: Usuario[] | undefined;
-
   pacientes: Usuario[] = [];
   especialistas: Usuario[] = [];
   admins: Usuario[] = [];
+  
+  mostrarLogin: boolean = true;
+  mostrarRegistro: boolean = !this.mostrarLogin;
+  mostrarEspecialidad: boolean = false;
+  mostrarMensaje: boolean = false;
+  mostrarSpinner:boolean = false;
 
   constructor(
     private userService: AuthService,
@@ -59,6 +55,7 @@ export class LoginComponent implements OnInit {
   }
 
   getDatos() {
+    this.mostrarSpinner = true;
     this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
       this.lista = respuesta.map(usuario => {
         if (usuario.imagen1) {
@@ -79,6 +76,7 @@ export class LoginComponent implements OnInit {
         }
       });
     });
+    this.mostrarSpinner = false;
   }
 
   arreglarImagenes(url: string): string {

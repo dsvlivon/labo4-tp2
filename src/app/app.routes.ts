@@ -6,6 +6,9 @@ import { BienvenidoComponent } from './componentes/bienvenido/bienvenido.compone
 import { HabilitarUsuariosComponent } from './componentes/habilitar-usuarios/habilitar-usuarios.component';
 import { adminGuard } from './guards/admin.guard';
 import { authGuard } from './guards/auth.guard';
+import { TurnosComponent } from './componentes/turnos/turnos.component';
+
+
 
 export const routes: Routes = [
     { path: 'bienvenido', component: BienvenidoComponent },
@@ -15,4 +18,5 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent, canActivate: [authGuard] },
     { path: 'registro', component: RegistroComponent },
     { path: 'habilitar-usuarios', component: HabilitarUsuariosComponent, canActivate: [adminGuard] },
+    { path: 'turnos', component: TurnosComponent },
 ];

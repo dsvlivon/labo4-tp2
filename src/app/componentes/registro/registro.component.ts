@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { CloudStorageService } from '../../services/cloud-storage.service';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 enum TipoRol {
   admin = 'admin',
@@ -16,13 +17,7 @@ enum TipoRol {
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatCheckboxModule,
-    MatButtonToggleModule
-  ],
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent ],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -45,7 +40,7 @@ export class RegistroComponent implements OnInit {
   tipoUsuario = "paciente";
   estadoAcceso = "aprobado";
 
-
+  mostrarSpinner: boolean = false;
   mostrarNuevaEspecialidad: boolean = false;
   mostrarMensaje: boolean = false;
   esAdmin: boolean = false;
@@ -238,6 +233,7 @@ export class RegistroComponent implements OnInit {
 
   async onFileChange(event: any, img: string) {
     let codigo = this.generarCodigoAleatorio();
+    this.mostrarSpinner = true;
     console.log("codigo: ", codigo)
     const file = event.target.files[0];
     if (file) {
@@ -245,6 +241,7 @@ export class RegistroComponent implements OnInit {
         this.imageUrl = await this.cloudStorage.subirImagenAsync("perfiles", codigo, file);
         console.log("url subido: ", this.imageUrl);
         this.formRegistro.patchValue({[img]: this.imageUrl});
+        this.mostrarSpinner = false;
       } catch (error) {
         console.error('Error al subir la imagen:', error);
       }
@@ -252,9 +249,11 @@ export class RegistroComponent implements OnInit {
   }
   
   async getImagen(carpeta: string, nombre: string) {
+    this.mostrarSpinner = true;
     try {
       this.imageUrl = await this.cloudStorage.getImagenAsync(carpeta, nombre);
       console.log('URL de la imagen:', this.imageUrl);
+      this.mostrarSpinner = false;
     } catch (error) {
       console.error('Error al obtener la imagen:', error);
     }

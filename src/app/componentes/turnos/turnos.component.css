@@ -1,0 +1,71 @@
+/* General container styling */
+.container {
+    width:70%;
+    margin: 0 auto;
+    margin-top: 5%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Text display styling */
+  .text-display {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  /* Selectors styling */
+  .selector-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .selector-group select {
+    width: 48%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Buttons styling */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .button-group button {
+    width: 48%;
+    padding: 10px;
+    font-size: 1em;
+    color: white;
+    background-color: #1976d2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button-group button:hover {
+    background-color: #145a8a;
+  }
+  
+  /* Summary styling */
+  .resumen {
+    font-size: 1.1em;
+    color: #555;
+    margin-top: 20px;
+  }
+  
+  .resumen ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .resumen ul li {
+    margin-bottom: 10px;
+  }
+  

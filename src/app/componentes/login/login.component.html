@@ -58,6 +58,9 @@
             <p style="margin-top:20px; color: darkslategrey; text-shadow: 0 0 10px white;">{{mensaje}}</p>
         </div>
     </div>
+    <div *ngIf="mostrarSpinner">
+      <app-spinner></app-spinner>
+    </div>
 </div>
 
 
