@@ -20,13 +20,13 @@ export class FirebaseService {
  
   obtenerDatoSinId(coleccion: string): Observable<any[]> {
     const lista = collection(this.fireStore, coleccion);
-    console.log("obtenerDatoSinId conteo: ", lista);
+    // console.log("obtenerDatoSinId conteo: ", lista);
     return collectionData(lista) as Observable<any[]>;
   }
 
   obtenerDato(coleccion: string): Observable<any[]> {
     const lista = collection(this.fireStore, coleccion);
-    console.log("obtenerDato conteo: ", lista);
+    // console.log("obtenerDato conteo: ", lista);
     return collectionData(lista, { idField: 'id' }) as Observable<any[]>;
   }
 

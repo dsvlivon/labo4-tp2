@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit{
   mostrarConfirmacion: boolean = true;
   mostrarHabilitar: boolean = false;
   mostrarRegistro: boolean = false;
+  mostrarTurnos: boolean = true;
   esAdmin: boolean = false;
   email: any;
   usuario: any;
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit{
 
   ngOnInit(): void {
     this.email = localStorage.getItem('user');
-    console.log('user', this.email);
+    // console.log('user', this.email);
     this.fireStore.obtenerDatoPorCriterio('usuarios', 'email', this.email).subscribe(data => {
       this.usuario = data[0];
       if (this.usuario) {
@@ -46,6 +47,9 @@ export class HomeComponent implements OnInit{
         }
         if(this.usuario.tipoUsuario === 'admin') {
           this.esAdmin = true;
+        }
+        if(this.usuario.tipoUsuario === 'especialista') {
+          this.mostrarTurnos = false;
         }
       }
       // console.log('Usuariox:', this.usuario);
@@ -69,6 +73,14 @@ export class HomeComponent implements OnInit{
 
   goVolver() {
     this.router.navigateByUrl('/home', { replaceUrl: true });
+  }
+
+  goEncuestas() {
+    // this.router.navigateByUrl('/home', { replaceUrl: true });
+  }
+
+  goTurnos() {
+    this.router.navigate(['/turnos'], { replaceUrl: true });
   }
 
   goUsuarios() {

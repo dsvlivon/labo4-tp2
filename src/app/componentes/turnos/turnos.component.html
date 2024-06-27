@@ -1,7 +1,8 @@
 <div class="container">
     <div class="text-display">
-        <h1>Hoy es {{ diaHoy }} {{ fechaHoy }}</h1>
-        <h2>Seleccione la especialidad y el especialista:</h2>
+        <h1>Hoy es {{ diaHoy }} {{ fechaHoy }} </h1>
+        <h2>Seleccione la especialidad y el especialista:</h2> 
+        
     </div>
 
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
@@ -22,17 +23,17 @@
 
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
 
-    <div class="text-display">
+    <div class="text-display" >
         <h2>Seleccione la Dia y Horario:</h2>
     </div>
 
     <div class="selector-group">
-        <select [(ngModel)]="diaSeleccionado" (ngModelChange)="seleccionarDia()" [ngModelOptions]="{ standalone: true }">
+        <select [(ngModel)]="diaSeleccionado" (ngModelChange)="seleccionarDia()" [ngModelOptions]="{ standalone: true }" [disabled]="!especialistaSeleccionado">
             <option value="">Selecciona un Día</option>
             <option *ngFor="let item of fechasQuincena" [ngValue]="item">{{item.dia}} - {{item.fecha}}</option>
         </select>
 
-        <select [(ngModel)]="horarioSeleccionado" (ngModelChange)="seleccionarHorario()" [ngModelOptions]="{ standalone: true }">
+        <select [(ngModel)]="horarioSeleccionado" (ngModelChange)="seleccionarHorario()" [ngModelOptions]="{ standalone: true }" [disabled]="!diaSeleccionado">
             <option value="">Selecciona un Horario</option>
             <option *ngFor="let item of horarios" [value]="item">{{item}}</option>
         </select>
@@ -52,8 +53,9 @@
     <div style="margin-top: 40px;"></div> <!-- DIVIDER-->
 
     <div class="button-group">
-        <button (click)="confirmarTurno()">Solicitar Turno</button>
-        <button (click)="cancelarTurno()">Cancelar</button>
+        <button class="btn-turnos" (click)="confirmarTurno()">Solicitar Turno</button>
+        <button class="btn-turnos" (click)="cancelarTurno()">Cancelar</button>
+        <button class="btn-turnos" style="background-color: lightblue;" (click)="goHome()"><mat-icon>keyboard_backspace</mat-icon></button>
     </div>
 
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->

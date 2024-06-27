@@ -3,6 +3,8 @@ import { Usuario } from "./usuarios.interface";
 export interface Turnos {
     especialidad: string;
     especialista: Usuario;
-    diaYHora: string;
+    dia: string,
+    hora: string;
     estado: string;
+    paciente: Usuario;
 }

@@ -119,19 +119,11 @@ export class RegistroComponent implements OnInit {
 
   onRegistrar() {
     if (this.formRegistro.valid) { 
-      //solo estoy aplicando verificacion de mail al paciente, esta bien?
-      if(this.tipoUsuario == "paciente"){
         this.userService.registrarConVerificacion(this.formRegistro.value).then(response => {
           const email = response.user.email || "null";
           localStorage.setItem('user', email);          
         }).catch((error: any) => this.setMensaje(error, 1));
-      } else {
-        this.userService.registrar(this.formRegistro.value).then(response => {
-          const email = response.user.email || "null";
-          localStorage.setItem('user', email);  
-        }).catch((error: any) => this.setMensaje(error, 1));    
-      }
-
+      
       setTimeout(() => {
         let obj = { 
           'nombre': this.formRegistro.value['nombre'] || '',
@@ -153,7 +145,7 @@ export class RegistroComponent implements OnInit {
         if(!this.esAdmin) {
           this.router.navigate(['/login']);
         } else {
-          alert("Usuario creado!")
+          this.router.navigate(['/home']);
         }
       }, 1500);      
     }

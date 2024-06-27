@@ -10,11 +10,12 @@ import { MatButtonToggleModule} from '@angular/material/button-toggle';
 import { CloudStorageService } from '../../services/cloud-storage.service';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { Turnos } from '../../models/turnos.interface';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-turnos',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent ],
+  imports: [ CommonModule, ReactiveFormsModule, MatIconModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent ],
   templateUrl: './turnos.component.html',
   styleUrl: './turnos.component.css'
 })
@@ -41,41 +42,70 @@ export class TurnosComponent implements OnInit{
   fechasQuincena: { fecha: string, dia: string }[] = [];
   especialidades: string[] = [];
   especialistas: any[] = [];
+  turnos: any[] = [];
   
   dias: string[] = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   email: any = "";
   usuario: any;
   esAdmin: boolean = false;
 
-  constructor(private fireStore: FirebaseService) {}
+  constructor(
+    private fireStore: FirebaseService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getDatos();
   }
 
   getDatos() {
-    this.generarHorarios();
+    
     this.fechaHoy = this.obtenerFechaHoy();
     this.diaHoy = this.obtenerDiaSemana(new Date());
-    console.log("Hoy: ", this.diaHoy + " - " + this.fechaHoy);
+    // console.log("Hoy: ", this.diaHoy + " - " + this.fechaHoy);
 
     this.calcularQuincena();
+
+    this.email = localStorage.getItem('user');
+    this.fireStore.obtenerDatoPorCriterio('usuarios', 'email', this.email).subscribe(data => {
+      this.usuario = data[0];
+      console.log('Usuario:', this.usuario);
+    });    
+
 
     this.fireStore.obtenerDato('especialidades').subscribe(respuesta => {
       this.listaEspecialidades = respuesta;
       this.auxListaEspecialidades = this.listaEspecialidades;
-      console.log("especialidades: ", this.listaEspecialidades);
+      // console.log("especialidades: ", this.listaEspecialidades);
     });
 
     this.email = localStorage.getItem('user');
-    console.log('user', this.email);
+    // console.log('user', this.email);
 
     this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
-      this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista');
+      this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
       this.auxListaEspecialistas = this.listaEspecialistas;
-      console.log("especialistas: ", this.listaEspecialistas);
+      // console.log("especialistas: ", this.listaEspecialistas);
+    });
+
+    this.fireStore.obtenerDato('turnos').subscribe(respuesta => {
+      this.turnos = respuesta;
+      console.log("turnos: ", this.turnos);
     });
   }
+
+  verificarDisponibilidadEspecialista(horario: any): boolean {
+    for (const turno of this.turnos) {
+      if (this.especialistaSeleccionado.id === turno.especialista.id) {
+        const dia = this.diaSeleccionado.dia + " " + this.diaSeleccionado.fecha;
+        if (turno.dia === dia && turno.hora === horario) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  
 
   calcularQuincena() {
     const hoy = new Date();
@@ -98,7 +128,10 @@ export class TurnosComponent implements OnInit{
       for (let minutos = 0; minutos < 60; minutos += intervalosMinutos) {
         const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
         const minutosFormateados = minutos < 10 ? `0${minutos}` : `${minutos}`;
-        this.horarios.push(`${horaFormateada}:${minutosFormateados}`);
+        let horario = `${horaFormateada}:${minutosFormateados}`;
+        if(this.verificarDisponibilidadEspecialista(horario)){
+          this.horarios.push(horario);
+        }
       }
     }
   }
@@ -113,16 +146,20 @@ export class TurnosComponent implements OnInit{
   }
 
   seleccionarDia() {
-    console.log("Opción seleccionada:", this.diaSeleccionado);
+    // console.log("Opción seleccionada:", this.diaSeleccionado);
     if (this.diaSeleccionado) {
+      if(this.diaSeleccionado === this.diaHoy){
+        this.horarios.filter(obj => obj >= this.fechaHoy);
+      }
       this.mostrarDia = true;
     } else {
       this.mostrarDia = false;
     }
+    this.generarHorarios();
   }
 
   seleccionarHorario() {
-    console.log("Opción seleccionada:", this.horarioSeleccionado);
+    // console.log("Opción seleccionada:", this.horarioSeleccionado);
     if (this.horarioSeleccionado) {
       this.mostrarHorario = true;
     } else {
@@ -131,7 +168,7 @@ export class TurnosComponent implements OnInit{
   }
 
   seleccionarEspecialidad() {
-    console.log("Especialidad seleccionada:", this.especialidadSeleccionada);
+    // console.log("Especialidad seleccionada:", this.especialidadSeleccionada);
     if (this.especialidadSeleccionada) {
       this.refrescar(); 
       this.listaEspecialistas = this.listaEspecialistas.filter(obj => obj.especialidad === this.especialidadSeleccionada);
@@ -145,18 +182,13 @@ export class TurnosComponent implements OnInit{
   }
   
   seleccionarEspecialista() {
-    console.log("Opción seleccionada:", this.especialistaSeleccionado);
+    console.log("Especialista seleccionada:", this.especialistaSeleccionado);
     if (this.especialistaSeleccionado) {
       this.mostrarEspecialista = true;         
     } else {
       this.mostrarEspecialista = false;
     }
-    // if (this.especialistaSeleccionado === "Todos") {
-    //   this.refrescar(); 
-    // }
   }
-
-
 
   refrescar() {
     this.listaEspecialidades = this.auxListaEspecialidades;
@@ -168,8 +200,10 @@ export class TurnosComponent implements OnInit{
       const obj: Turnos = {
         especialidad: this.especialidadSeleccionada,
         especialista: this.especialistaSeleccionado,
-        diaYHora: `${this.diaSeleccionado.dia} ${this.diaSeleccionado.fecha} ${this.horarioSeleccionado}`,
-        estado: 'Pendiente' // por default
+        dia:`${this.diaSeleccionado.dia} ${this.diaSeleccionado.fecha}`,
+        hora: this.horarioSeleccionado,
+        estado: 'Pendiente', // por default
+        paciente: this.usuario
       };
       this.fireStore.setData(obj, 'turnos');   
       console.log('Nuevo turno creado:', obj);      
@@ -188,5 +222,9 @@ export class TurnosComponent implements OnInit{
     this.mostrarEspecialidad = false;
     this.mostrarDia = false;
     this.mostrarHorario = false;
+  }
+
+  goHome() { 
+    this.router.navigate(['/home']);
   }
 }

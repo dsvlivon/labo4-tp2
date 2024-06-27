@@ -24,10 +24,10 @@ export class AuthService {
 
       if (user) {
         await sendEmailVerification(user);
-        alert("Su usuario ha sido creado con éxito! \nPor favor, verifique en su casilla de correo el mail de verificación.");
+        alert("El usuario ha sido creado con éxito! \nPor favor, verifique en su casilla de correo el mail de verificación.");
         signOut(this.auth);
       }    
-
+      // console.error("credenciales during registration:", userCredential);
       return userCredential;
     } catch (error) {
       console.error("Error during registration:", error);
@@ -35,7 +35,8 @@ export class AuthService {
     }
   }
 
-  registrar({email, clave}: any){
+
+  async registrar({email, clave}: any){
     return createUserWithEmailAndPassword(this.auth, email, clave)
   }
 

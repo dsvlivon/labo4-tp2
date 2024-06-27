@@ -11,9 +11,12 @@
     <div class="der">
         <ul class="nav-links">
             <li><a (click)="goRegistro()" title="Alta de Usaurios" *ngIf="esAdmin"><mat-icon>add_circle_outline</mat-icon></a></li>
+            <li><a (click)="goTurnos()" title="Solicitar Turnos" *ngIf="mostrarTurnos" ><mat-icon>event</mat-icon></a></li>
+            <!-- <li><a (click)="goTurnos()" title="Turnos" *ngIf="mostrarTurnos" ><mat-icon>event_available</mat-icon></a></li> ES MAS PARA TURNOS CONFIRMADOS-->
+            <li><a (click)="goEncuestas()" title="Encuestas" ><mat-icon>equalizer</mat-icon></a></li>
+
             <li><a (click)="goUsuarios()" title="Usuaruis" *ngIf="esAdmin"><mat-icon>supervisor_account</mat-icon></a></li>
             <li><a (click)="goHome()" title="Home" *ngIf="!mostrarConfirmacion" ><mat-icon>home</mat-icon></a></li>
-            <!-- <li><a (click)="goVolver()" title="Volver" *ngIf="!mostrarConfirmacion"><mat-icon>keyboard_backspace</mat-icon></a></li> -->
             <li><a (click)="goLogOut()" title="Salir"><mat-icon>open_in_new</mat-icon></a></li> 
         </ul>
     </div>

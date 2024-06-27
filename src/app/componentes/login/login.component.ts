@@ -106,12 +106,17 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.userService.login(this.formLogin.value)
       .then((response: any) => {
-        const email = response.user.email;
-        localStorage.setItem('user', email);
-        // console.log("data log: ", this.usuario)
-        this.router.navigate(['/home']);
+        if(response.user.emailVerified){
+          const email = response.user.email;
+          localStorage.setItem('user', email);
+          // console.log("data log: ", this.usuario)
+          this.router.navigate(['/home']);
+        } else { 
+          let error = {"code":"verificacion"}
+          this.setMensaje(error);
+        }
       })
-      .catch(error => this.setMensaje(error, 2));
+      .catch(error => this.setMensaje(error));
   }
 
   fetchUser(mail:string){
@@ -140,9 +145,12 @@ export class LoginComponent implements OnInit {
     return false;
   }
 
-  setMensaje(error: any, num: number) {
+  setMensaje(error: any) {
     this.mostrarMensaje = true;
     switch (error.code) {
+      case "verificacion":
+        this.mensaje = "El correo no esta verificado, revise su casilla de email o contacte con un administrador";
+        break;
       case "auth/invalid-credential":
         this.mensaje = "La contraseña proporcionada no es válida.";
         break;
