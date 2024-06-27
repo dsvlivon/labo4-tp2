@@ -61,3 +61,42 @@ line-height: 2;
 .perfil-detalles p strong {
 font-weight: bold;
 }
+
+.horarios-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button.selected {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .button-group button {
+    width: 48%;
+    padding: 10px;
+    font-size: 1em;
+    color: white;
+    background-color: #1976d2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button-group button:hover {
+    background-color: #145a8a;
+  }

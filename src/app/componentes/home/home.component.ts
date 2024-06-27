@@ -58,11 +58,11 @@ export class HomeComponent implements OnInit{
 
   goLogOut() { 
     this.mostrarSpinner = true; 
-    console.log("spinner: ", this.mostrarSpinner)
+    // console.log("spinner: ", this.mostrarSpinner)
     setTimeout(() => {
       this.authService.logout()
       this.mostrarSpinner = false;
-      console.log("spinner: ", this.mostrarSpinner)
+      // console.log("spinner: ", this.mostrarSpinner)
       this.router.navigateByUrl('bienvenido', { replaceUrl: true})
     }, 1500);
   }
