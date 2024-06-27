@@ -93,5 +93,8 @@ export class HomeComponent implements OnInit{
     this.mostrarRegistro = !this.mostrarRegistro;
     this.mostrarHabilitar = !this.mostrarRegistro;
   }
- 
+
+  goMiPerfil() {
+    this.router.navigateByUrl('/miPerfil', { replaceUrl: true });
+  } 
 }

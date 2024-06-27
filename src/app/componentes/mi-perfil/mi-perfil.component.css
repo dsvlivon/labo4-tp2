@@ -1,0 +1,63 @@
+.perfil-background {
+    background-image: url('https://github.com/dsvlivon/imagenes/blob/main/parciales/fondo-background-azul.jpg?raw=true');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.perfil-container {
+    width: 60%;
+    height: 60%;
+    margin: 0 auto;
+    padding: 90px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: whitesmoke;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    position:fixed;
+    top: 110px;
+    right: 310px;
+    background: lightcoral;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+  }  
+  
+.perfil-info {
+margin-top: 50px;
+display: flex;
+align-items: center;
+}
+  
+.perfil-imagen img {
+width: 250px;
+height: 250px;
+border-radius: 50%;
+margin-right: 20px;
+}
+
+.perfil-detalles {
+flex: 1;
+margin-left: 60px;
+}
+
+.perfil-detalles p {
+margin: 8px 0;
+font-size: x-large;
+line-height: 2;
+}
+
+.perfil-detalles p strong {
+font-weight: bold;
+}

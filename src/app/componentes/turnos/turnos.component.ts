@@ -79,9 +79,6 @@ export class TurnosComponent implements OnInit{
       // console.log("especialidades: ", this.listaEspecialidades);
     });
 
-    this.email = localStorage.getItem('user');
-    // console.log('user', this.email);
-
     this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
       this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
       this.auxListaEspecialistas = this.listaEspecialistas;

@@ -7,6 +7,7 @@ import { HabilitarUsuariosComponent } from './componentes/habilitar-usuarios/hab
 import { adminGuard } from './guards/admin.guard';
 import { authGuard } from './guards/auth.guard';
 import { TurnosComponent } from './componentes/turnos/turnos.component';
+import { MiPerfilComponent } from './componentes/mi-perfil/mi-perfil.component';
 
 
 
@@ -19,4 +20,5 @@ export const routes: Routes = [
     { path: 'registro', component: RegistroComponent },
     { path: 'habilitar-usuarios', component: HabilitarUsuariosComponent, canActivate: [adminGuard] },
     { path: 'turnos', component: TurnosComponent },
+    { path: 'miPerfil', component: MiPerfilComponent },
 ];

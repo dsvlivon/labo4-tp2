@@ -1,0 +1,21 @@
+<div class="perfil-background">
+    <div class="perfil-container" *ngIf="usuario">
+        <h2>Clínica DV - Perfil de {{tipo}}</h2> 
+        <button class="close" (click)="goHome()">&times;</button>
+        <div class="perfil-info">
+          <div class="perfil-imagen">
+            <img *ngIf="usuario?.imagen1" [src]="usuario?.imagen1" alt="pic 1">
+            <img *ngIf="usuario?.imagen2" [src]="usuario?.imagen2" alt="pic 2">
+          </div>
+          <div class="perfil-detalles">
+            <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+            <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+            <p><strong>Edad:</strong> {{ usuario.edad }}</p>
+            <p><strong>DNI:</strong> {{ usuario.dni }}</p>
+            <p><strong>Email:</strong> {{ usuario.email }}</p>
+            <p><strong>Tipo de Usuario:</strong> {{ usuario.tipoUsuario }}</p>
+            <p><strong>Estado de Acceso:</strong> {{ usuario.estadoAcceso }}</p>
+          </div>
+        </div>
+      </div>
+</div>
