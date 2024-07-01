@@ -72,12 +72,11 @@ export class TurnosComponent implements OnInit{
       console.log('Usuario:', this.usuario);
     });    
 
-
-    this.fireStore.obtenerDato('especialidades').subscribe(respuesta => {
-      this.listaEspecialidades = respuesta;
-      this.auxListaEspecialidades = this.listaEspecialidades;
-      // console.log("especialidades: ", this.listaEspecialidades);
-    });
+    // this.fireStore.obtenerDato('especialidades').subscribe(respuesta => {
+    //   this.listaEspecialidades = respuesta;
+    //   this.auxListaEspecialidades = this.listaEspecialidades;
+    //   // console.log("especialidades: ", this.listaEspecialidades);
+    // });
 
     this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
       this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
@@ -109,7 +108,7 @@ export class TurnosComponent implements OnInit{
     for (let i = 0; i < 15; i++) {
       const nuevaFecha = new Date(hoy);
       nuevaFecha.setDate(hoy.getDate() + i);
-      const fechaFormateada = formatDate(nuevaFecha, 'dd', 'en-AR');
+      const fechaFormateada = formatDate(nuevaFecha, 'dd-MM-YYYY', 'en-AR');
       this.mesHoy = formatDate(nuevaFecha, 'MM', 'en-AR');
       const diaSemana = this.obtenerDiaSemana(nuevaFecha);
       this.fechasQuincena.push({ fecha: fechaFormateada, dia: diaSemana });
@@ -126,10 +125,49 @@ export class TurnosComponent implements OnInit{
         const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
         const minutosFormateados = minutos < 10 ? `0${minutos}` : `${minutos}`;
         let horario = `${horaFormateada}:${minutosFormateados}`;
-        if(this.verificarDisponibilidadEspecialista(horario)){
-          this.horarios.push(horario);
+        if (this.verificarDisponibilidadEspecialista(horario)) {
+            this.horarios.push(horario);
         }
       }
+    }  
+  }
+
+  convertirAMPM(horario: string): string {
+    let [hora, minutos] = horario.split(':').map(Number);
+    const periodo = hora >= 12 ? 'PM' : 'AM';
+    hora = hora % 12 || 12; // Convertir 0 o 12 a 12 para AM/PM
+    const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
+    return `${horaFormateada}:${minutos < 10 ? `0${minutos}` : minutos} ${periodo}`;
+}
+
+  generarEspecialidades() {
+    this.listaEspecialidades = []; // Reset listaEspecialidades
+    if (this.especialistaSeleccionado && Array.isArray(this.especialistaSeleccionado.especialidad)) {
+        this.especialistaSeleccionado.especialidad.forEach((element: any) => {
+            this.listaEspecialidades.push(element);
+        });
+    } else {
+        console.error("especialistaSeleccionado no tiene una propiedad especialidad válida");
+    }
+    // console.log("Especialidades disponibles:", this.listaEspecialidades);
+  }
+
+  obtenerImagen(val: string){
+    switch (val){
+      case "Cardiologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cardiologia.jpg?raw=true';
+      break;
+      case "Cirugia de Coxis": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cirugia.jpg?raw=true';
+      break;
+      case "Medicina General": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/general.jpg?raw=true';
+      break;
+      case "Ginecologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/ginecologia.jpg?raw=true';
+      break;
+      case "Rayos Rimpi": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/rayos.jpg?raw=true';
+      break;
+      case "Urologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/urologia.jpg?raw=true';
+      break;
+      default: return 'https://github.com/dsvlivon/imagenes/blob/main/botones/default.jpg';
+      break;
     }
   }
 
@@ -142,8 +180,8 @@ export class TurnosComponent implements OnInit{
     return this.dias[fecha.getDay()];
   }
 
-  seleccionarDia() {
-    // console.log("Opción seleccionada:", this.diaSeleccionado);
+  seleccionarDia(val: any) {
+    this.diaSeleccionado = val;
     if (this.diaSeleccionado) {
       if(this.diaSeleccionado === this.diaHoy){
         this.horarios.filter(obj => obj >= this.fechaHoy);
@@ -153,10 +191,12 @@ export class TurnosComponent implements OnInit{
       this.mostrarDia = false;
     }
     this.generarHorarios();
+    this.mostrarHorario = true;
   }
 
-  seleccionarHorario() {
+  seleccionarHorario(val: any) {
     // console.log("Opción seleccionada:", this.horarioSeleccionado);
+    this.horarioSeleccionado = val
     if (this.horarioSeleccionado) {
       this.mostrarHorario = true;
     } else {
@@ -164,32 +204,49 @@ export class TurnosComponent implements OnInit{
     }
   }
 
-  seleccionarEspecialidad() {
-    // console.log("Especialidad seleccionada:", this.especialidadSeleccionada);
+  seleccionarEspecialidad(especialidad: string) {
+    this.especialidadSeleccionada = especialidad;
+
     if (this.especialidadSeleccionada) {
-      this.refrescar(); 
-      this.listaEspecialistas = this.listaEspecialistas.filter(obj => obj.especialidad === this.especialidadSeleccionada);
+      // this.refrescar(); 
       this.mostrarEspecialidad = true;
+      this.mostrarDia = true;
     } else {
       this.mostrarEspecialidad = false;
+      this.mostrarDia = false;
     }
     if (this.especialidadSeleccionada === "Todos") {
       this.refrescar(); 
     }
   }
   
-  seleccionarEspecialista() {
-    console.log("Especialista seleccionada:", this.especialistaSeleccionado);
-    if (this.especialistaSeleccionado) {
-      this.mostrarEspecialista = true;         
-    } else {
-      this.mostrarEspecialista = false;
+  seleccionarEspecialista(obj: any) {
+    if(this.especialistaSeleccionado != obj && this.especialistaSeleccionado!= null) {
+      this.listaEspecialidades = this.auxListaEspecialidades;
     }
+
+    this.especialistaSeleccionado = obj;
+    console.log("Especialista seleccionada:", this.especialistaSeleccionado.nombre + " " + this.especialistaSeleccionado.apellido);
+    this.auxListaEspecialidades = this.listaEspecialidades;
+    this.listaEspecialidades = this.listaEspecialidades.filter(obj => obj.especialidad === this.especialistaSeleccionado.especialidad);
+    this.mostrarEspecialista = true;
+    this.mostrarEspecialidad = true;
+
+    // console.log("especialista: ", this.especialistaSeleccionado);
+    this.generarEspecialidades();
+  }
+
+  estaSeleccionado(obj: any): boolean {
+    // Lógica para verificar si el especialista está seleccionado
+    return this.especialistaSeleccionado === obj;
   }
 
   refrescar() {
     this.listaEspecialidades = this.auxListaEspecialidades;
     this.listaEspecialistas = this.auxListaEspecialistas;
+    this.mostrarEspecialidad = false;
+    this.mostrarDia = false;
+    this.mostrarHorario = false;
   }
 
   confirmarTurno() {

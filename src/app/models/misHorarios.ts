@@ -1,6 +1,7 @@
 import { Usuario } from "./usuarios.interface";
 
 export interface MisHorarios {
+    id:string;
     especialista: string;
-    misHorarios: any[]
+    misHorarios: { [key: string]: string[] };
 }

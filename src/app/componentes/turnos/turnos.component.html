@@ -1,62 +1,104 @@
-<div class="container">
-    <div class="text-display">
-        <h1>Hoy es {{ diaHoy }} {{ fechaHoy }} </h1>
-        <h2>Seleccione la especialidad y el especialista:</h2> 
+<div class="background">
+    <div class="container">
+        <div class="text-display">
+            <h1>Hoy es {{ diaHoy }} {{ fechaHoy }} </h1>
+        </div>
+
+        <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+
+        <div class="text-display">
+            <h3>Seleccione el Especialista:</h3>
+        </div>
+        <div class="fotos-container">
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <button *ngFor="let obj of listaEspecialistas" (click)="seleccionarEspecialista(obj)"
+                [ngClass]="{ 'seleccionado': estaSeleccionado(obj) }">
+                <img [src]="obj.imagen1" alt="{{ obj.nombre + ' ' + obj.apellido }}" class="btn-foto">
+                <p>{{ obj.nombre + ' ' + obj.apellido }}</p>
+            </button>
+        </div>
+
+        <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+
+        <div class="botones-container" *ngIf="mostrarEspecialidad">
+            <div class="text-display">
+                <h3>Seleccione la Especialidad:</h3>
+            </div>            
+        </div>
+        <div class="botones-container" *ngIf="mostrarEspecialidad">
+            <!-- <select [(ngModel)]="especialidadSeleccionada" (ngModelChange)="seleccionarEspecialidad()" [ngModelOptions]="{ standalone: true }">
+                <option value="" disabled selected>Seleccione Especialidad</option>
+                <option *ngFor="let item of listaEspecialidades" [value]="item">{{ item }}</option>
+                <option value="Todos">Todos</option>
+            </select> -->            
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <div class="botones-wrapper">
+                <button *ngFor="let item of listaEspecialidades" (click)="seleccionarEspecialidad(item)" class="btn-especialidad">
+                    <img [src]="obtenerImagen(item)" alt="{{ item }}" class="btn-foto">
+                    <p>{{ item }}</p>
+                </button>
+            </div>
+        </div>
         
+        <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+
+        <div class="text-display" *ngIf="mostrarDia">
+            <h3>Seleccione el Día:</h3>
+        </div>
+        <div class="selector-group" *ngIf="mostrarDia">
+            <!-- <select [(ngModel)]="diaSeleccionado" (ngModelChange)="seleccionarDia()"
+                [ngModelOptions]="{ standalone: true }" [disabled]="!especialistaSeleccionado">
+                <option value="">Selecciona un Día</option>
+                <option *ngFor="let item of fechasQuincena" [ngValue]="item">{{item.fecha}} {{item.dia}}</option>
+            </select> -->
+            <div class="botones-wrapper">
+                <button *ngFor="let item of fechasQuincena" (click)="seleccionarDia(item)" class="btn-fechas">
+                    <p>{{item.fecha}}</p> 
+                    <p>{{item.dia}}</p>
+                </button>
+            </div>
+        </div>
+
+        <div class="text-display" *ngIf="mostrarHorario">
+            <h3>Seleccione el Horario:</h3>
+        </div>
+        <div class="selector-group" *ngIf="mostrarHorario">
+            <!-- <select [(ngModel)]="horarioSeleccionado" (ngModelChange)="seleccionarHorario()"
+                [ngModelOptions]="{ standalone: true }" [disabled]="!diaSeleccionado">
+                <option value="">Selecciona un Horario</option>
+                <option *ngFor="let item of horarios" [value]="item">{{ convertirAMPM(item) }}</option>
+            </select> -->
+            <div class="botones-wrapper">
+                <button *ngFor="let item of horarios" (click)="seleccionarHorario(item)" class="btn-horarios">
+                    {{ convertirAMPM(item) }}
+                </button>
+            </div>
+        </div>
+        <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+
+        <div class="resumen">
+            <ul>
+                <li *ngIf="mostrarEspecialista">- Usted ha elegido al especialista: {{especialistaSeleccionado?.nombre}}
+                    {{especialistaSeleccionado?.apellido}}</li>
+                <li *ngIf="especialidadSeleccionada">- Usted ha elegido la especialidad: {{especialidadSeleccionada}}
+                </li>
+                <li *ngIf="diaSeleccionado">- Usted ha elegido el día: {{diaSeleccionado?.dia}} -
+                    {{diaSeleccionado?.fecha}}</li>
+                <li *ngIf="horarioSeleccionado">- Usted ha elegido la hora: {{horarioSeleccionado}}</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 40px;"></div> <!-- DIVIDER-->
+
+        <div class="button-group">
+            <button class="btn-turnos" (click)="confirmarTurno()"
+                *ngIf="mostrarDia && mostrarEspecialidad && mostrarEspecialista && mostrarHorario">Solicitar
+                Turno</button>
+            <button class="btn-turnos" (click)="cancelarTurno()">Cancelar</button>
+            <button class="btn-turnos" style="background-color: rgb(212, 92, 62);"
+                (click)="goHome()"><mat-icon>keyboard_backspace</mat-icon></button>
+        </div>
+
+        <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
     </div>
-
-    <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-
-    <div class="selector-group">
-        <select [(ngModel)]="especialidadSeleccionada" (ngModelChange)="seleccionarEspecialidad()" [ngModelOptions]="{ standalone: true }">
-            <option value="" disabled selected>Seleccione Especialidad</option>
-            <option *ngFor="let item of listaEspecialidades" [value]="item.especialidad">{{ item.especialidad }}</option>
-            <option value="Todos">Todos</option>
-        </select>
-
-        <select [(ngModel)]="especialistaSeleccionado" (ngModelChange)="seleccionarEspecialista()" [ngModelOptions]="{ standalone: true }" [disabled]="!especialidadSeleccionada">
-            <option value="" disabled selected>Seleccione Especialista</option>
-            <option *ngFor="let item of listaEspecialistas" [ngValue]="item">{{ item.nombre }} {{item.apellido}}</option>
-            <option value="Todos">Todos</option>
-        </select>
-    </div>
-
-    <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-
-    <div class="text-display" >
-        <h2>Seleccione la Dia y Horario:</h2>
-    </div>
-
-    <div class="selector-group">
-        <select [(ngModel)]="diaSeleccionado" (ngModelChange)="seleccionarDia()" [ngModelOptions]="{ standalone: true }" [disabled]="!especialistaSeleccionado">
-            <option value="">Selecciona un Día</option>
-            <option *ngFor="let item of fechasQuincena" [ngValue]="item">{{item.dia}} - {{item.fecha}}</option>
-        </select>
-
-        <select [(ngModel)]="horarioSeleccionado" (ngModelChange)="seleccionarHorario()" [ngModelOptions]="{ standalone: true }" [disabled]="!diaSeleccionado">
-            <option value="">Selecciona un Horario</option>
-            <option *ngFor="let item of horarios" [value]="item">{{item}}</option>
-        </select>
-    </div>
-
-    <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-
-    <div class="resumen">
-        <ul>
-            <li *ngIf="mostrarEspecialidad">- Usted ha elegido la especialidad: {{especialidadSeleccionada}}</li>
-            <li *ngIf="mostrarEspecialista">- Usted ha elegido al especialista: {{especialistaSeleccionado?.nombre}} {{especialistaSeleccionado?.apellido}}</li>
-            <li *ngIf="mostrarDia">- Usted ha elegido el día: {{diaSeleccionado?.dia}} - {{diaSeleccionado?.fecha}}</li>
-            <li *ngIf="mostrarHorario">- Usted ha elegido la hora: {{horarioSeleccionado}}</li>
-        </ul>
-    </div>
-
-    <div style="margin-top: 40px;"></div> <!-- DIVIDER-->
-
-    <div class="button-group">
-        <button class="btn-turnos" (click)="confirmarTurno()">Solicitar Turno</button>
-        <button class="btn-turnos" (click)="cancelarTurno()">Cancelar</button>
-        <button class="btn-turnos" style="background-color: lightblue;" (click)="goHome()"><mat-icon>keyboard_backspace</mat-icon></button>
-    </div>
-
-    <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
 </div>

@@ -1,14 +1,15 @@
 .login-background {
-    background-image: url('https://github.com/dsvlivon/imagenes/blob/main/parciales/fondo-background-azul.jpg?raw=true');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-image: url('https://github.com/dsvlivon/imagenes/blob/main/parciales/fondo-background-azul.jpg?raw=true');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 150vh;
+  display: flex;
+  justify-content: center;
+  
+  padding: 0;
 }
 
 
@@ -19,18 +20,20 @@
     justify-content: center;
     height: 100vh;
 }
+
 .formulario {
-    background-color: lightskyblue;
-    color: white;
-    border-radius: 8%;
-    width: 550px;
-    height: auto;
-    box-shadow: 0 0 50px 5px lightskyblue; 
-    display: flex; /* Utiliza flexbox */
-    flex-direction: column; /* Alinea los elementos verticalmente */
-    align-items: center; /* Centra los elementos horizontalmente */
-    justify-content: center; /* Centra los elementos verticalmente */
-    padding: 20px; /* Espacio interno */
+  background-color: lightskyblue;
+  color: white;
+  border-radius: 8%;
+  width: 550px;
+  height: 1000px;
+  box-shadow: 0 0 50px 5px lightskyblue; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin-top: 30px;
 }
 
 .login-form {
@@ -68,27 +71,25 @@
   border-radius: 4px;
 }
 
-
+/* #region BOTONES */
 .btn-submit {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .btn-google {
-    padding: 10px 20px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
-
-
 
 .btn-76,
 .btn-76 *,
@@ -201,4 +202,54 @@
   --progress: 100%;
   opacity: 1;
   transition: transform 0.2s linear 0.6s;
+}
+
+.btn-foto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.btn-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* #endregion */
+
+.accesos-rapidos {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.logo-imagen {
+  width: 120px;
+  height: auto;
+  max-width: 100%;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.btn-clear {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  color: white;
 }

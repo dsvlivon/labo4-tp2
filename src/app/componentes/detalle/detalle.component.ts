@@ -15,13 +15,16 @@ export class DetalleComponent implements OnChanges {
   mostrarDetalle: boolean = true;
   mostrarHabilitar: boolean = false;
   mostrarDeshabilitar: boolean = false;
+  especialidades: string[] = [];
 
   constructor(private fireStore: FirebaseService) {
-    console.log("detalle!");
+    // console.log("detalle!");
   }
 
   ngOnChanges() {
     if(this.obj.tipoUsuario == "especialista") {
+      this.obtenerEspecialidades();
+      
       if(this.obj.estadoAcceso == "pendiente") {
         this.mostrarHabilitar = true;
         this.mostrarDeshabilitar = false;
@@ -33,7 +36,18 @@ export class DetalleComponent implements OnChanges {
       this.mostrarHabilitar = false;
       this.mostrarDeshabilitar = false;
     }
-    this.mostrarDetalle = !!this.obj;
+  }
+
+  obtenerEspecialidades(){
+    this.especialidades = [];
+    console.log("obj esp: ", this.obj.especialidad)
+    if (this.obj && Array.isArray(this.obj.especialidad)) {
+        this.obj.especialidad.forEach((element: any) => {
+            this.especialidades.push(element);
+        });
+    } else {
+        console.error("especialistaSeleccionado no tiene una propiedad especialidad válida");
+    }
   }
 
   cerrarModal() {

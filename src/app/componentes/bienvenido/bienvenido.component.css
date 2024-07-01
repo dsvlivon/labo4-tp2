@@ -1,3 +1,16 @@
+.background {
+    background-image: url('https://us.123rf.com/450wm/titaporn/titaporn2005/titaporn200500017/146350566-personaje-de-dibujos-animados-con-m%C3%A9dicos-y-enfermeras-profesionales-que-usan-una-suite-protectora-y.jpg?ver=6');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -10,7 +23,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
+    background: red;
 }
 
 .welcome-container {
@@ -56,4 +69,26 @@ body, html {
 
 .register-btn:hover {
     background-color: #218838;
+}
+
+.links {
+    display:inline-flex;
+    justify-content: center; 
+    align-items: center;
+    margin: 0 auto;
+    padding: 0 auto;
+    font-size: large;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: lightskyblue;
+    height: 5vh;
+    width: 100%;
+    display: flex;  
+    flex-wrap: wrap;
+    padding-top: 10px;
+}
+
+.icons {
+    margin-left: 30px; 
+    margin-right: 30px;
+    color: rgb(255, 255, 255);
 }

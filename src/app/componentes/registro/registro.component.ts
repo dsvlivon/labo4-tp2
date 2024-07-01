@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatButtonToggleModule} from '@angular/material/button-toggle';
 import { CloudStorageService } from '../../services/cloud-storage.service';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { MatIconModule } from '@angular/material/icon';
 
 enum TipoRol {
   admin = 'admin',
@@ -17,7 +18,7 @@ enum TipoRol {
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent ],
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule, MatIconModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent ],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -36,6 +37,7 @@ export class RegistroComponent implements OnInit {
   tiposRol: string[] = Object.values(TipoRol);
   lista: any[] = []; 
   especialidades: string[] = Object.values(this.lista);
+  auxEspecialidades: string[] = [];
   opcionSeleccionada: string = '';
   tipoUsuario = "paciente";
   estadoAcceso = "aprobado";
@@ -118,6 +120,7 @@ export class RegistroComponent implements OnInit {
   }
 
   onRegistrar() {
+    this.mostrarSpinner = true;
     if (this.formRegistro.valid) { 
         this.userService.registrarConVerificacion(this.formRegistro.value).then(response => {
           const email = response.user.email || "null";
@@ -137,7 +140,7 @@ export class RegistroComponent implements OnInit {
           'obraSocial': this.formRegistro.value['obraSocial'] || '',
           'estadoAcceso': this.estadoAcceso,
           'tipoUsuario': this.tipoUsuario,
-          'especialidad': this.opcionSeleccionada || ''
+          'especialidad': this.auxEspecialidades || ''
         };
         this.fireStore.setData(obj, 'usuarios');   
         // localStorage.setItem('user', this.formRegistro.value['email']);
@@ -149,6 +152,7 @@ export class RegistroComponent implements OnInit {
         }
       }, 1500);      
     }
+    this.mostrarSpinner = false;
   }
 
   onGuardarEspecialidad() {
@@ -191,15 +195,16 @@ export class RegistroComponent implements OnInit {
     }, 3000);
   }
 
-  selectorTipoDeUsuario(event: any) {
-    console.log("tipoUsuario: ", event.value);
+  selectorTipoDeUsuario(tipo: string) {
+    this.tipoUsuario=tipo;
+    console.log("tipoUsuario: ", this.tipoUsuario);
     
-    if (event.value == "especialista") {
+    if (this.tipoUsuario == "especialista") {
       this.estadoAcceso = "pendiente";
       this.mostrarEspecialidad = true;
       this.mostrarFoto2 = false;
       this.mostrarObraSocial = false;
-    } else if (event.value == "admin") {
+    } else if (this.tipoUsuario == "admin") {
       this.estadoAcceso = "aprobado";
       this.mostrarEspecialidad = false;
       this.mostrarFoto2 = false;
@@ -210,17 +215,20 @@ export class RegistroComponent implements OnInit {
       this.mostrarFoto2 = true;
       this.mostrarObraSocial = true;
     }
-    
-    this.tipoUsuario = event.value;
   }
 
   seleccionarOpcion() {
-    // console.log("Opción seleccionada:", this.opcionSeleccionada);
     if(this.opcionSeleccionada == "Nuevo") {
       this.mostrarNuevaEspecialidad = true;
     } else {
       this.mostrarNuevaEspecialidad = false;
-    }
+      this.auxEspecialidades.push(this.opcionSeleccionada)
+      console.log("Opciónes: ", this.auxEspecialidades);
+    }   
+  }
+
+  agregarEspecialidad(){
+    this.opcionSeleccionada = "";
   }
 
   async onFileChange(event: any, img: string) {

@@ -37,16 +37,20 @@ export class FirebaseService {
     return collectionData(q, { idField: 'id' }) as Observable<any[]>;
   }
 
-  actualizarObj(coleccion:string ,id: string, estadoAcceso: string) {
+  actualizarObj(coleccion:string ,id: string, estadoAcceso: any) {
     const dataRef = doc(this.fireStore, coleccion, id);
     updateDoc(dataRef, {
       estadoAcceso
     });
   }
 
-  // obtenerDatoPorCriterio2(collection: string, field: string, value: any): Observable<any[]> {
-  //   return this.fireStore.collection(collection, ref => ref.where(field, '==', value)).valueChanges();
-  // }  
+  actualizarHorarios(coleccion:string ,id: string, misHorarios: any) {
+    const dataRef = doc(this.fireStore, coleccion, id);
+    updateDoc(dataRef, {
+      misHorarios
+    });
+  }
+
 
   deleteDato(obj: any, collection: string) {
     const docRef = doc(this.fireStore, collection, obj.id);

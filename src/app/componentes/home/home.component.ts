@@ -82,6 +82,9 @@ export class HomeComponent implements OnInit{
   goTurnos() {
     this.router.navigate(['/turnos'], { replaceUrl: true });
   }
+  goMisTurnos() {
+    this.router.navigate(['/misTurnos'], { replaceUrl: true });
+  }
 
   goUsuarios() {
    this.mostrarHabilitar = !this.mostrarHabilitar;

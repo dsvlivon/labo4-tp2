@@ -1,9 +1,16 @@
 <div class="login-background">
     <div class="formulario">
-        <img class="logo" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo">
+        <img src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo" class="logo-imagen">
+
+
+        <div class="accesos-rapidos">
+            <button  class="btn-foto" (click)="selectorTipoDeUsuario('paciente')"><img src="https://github.com/dsvlivon/imagenes/blob/main/perfiles/viejo1.png?raw=true" alt="Paciente" title="Paciente"></button>
+            <button  class="btn-foto" (click)="selectorTipoDeUsuario('especialista')"><img src="https://github.com/dsvlivon/imagenes/blob/main/perfiles/especialista2.png?raw=true" alt="Especialista" title="Especialista"></button>
+            <button  *ngIf="esAdmin" class="btn-foto" (click)="selectorTipoDeUsuario('admin')"><img src="https://github.com/dsvlivon/imagenes/blob/main/perfiles/admin.png?raw=true" alt="Administrador" title="Administrador"></button>
+        </div>
         
         <form [formGroup]="formRegistro" (ngSubmit)="onRegistrar()" class="login-form">
-            <div class="mb-3" style="align-items: center; display: flex; width: 80%; margin-left: 25%;" *ngIf="!esAdmin">
+            <!-- <div class="mb-3" style="align-items: center; display: flex; width: 80%; margin-left: 25%;" *ngIf="!esAdmin">
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="'paciente'" (change)="selectorTipoDeUsuario($event)">
                     <mat-button-toggle value="paciente">Paciente</mat-button-toggle>
                     <mat-button-toggle value="especialista">Especialista</mat-button-toggle>
@@ -16,7 +23,38 @@
                     <mat-button-toggle value="especialista">Especialista</mat-button-toggle>
                     <mat-button-toggle value="admin">Admin</mat-button-toggle>
                 </mat-button-toggle-group>
-            </div>  
+            </div>   -->
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <div *ngIf="mostrarEspecialidad">
+                Especialidad: 
+                <select [(ngModel)]="opcionSeleccionada" (ngModelChange)="seleccionarOpcion()" [ngModelOptions]="{ standalone: true }">
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of lista" [value]="item.especialidad">{{ item.especialidad }}</option>
+                    <option value="Nuevo">Nuevo</option>
+                </select>
+            </div>
+
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+
+            <div style="display: flex; direction: column;" *ngIf="mostrarEspecialidad">
+                 <p><mat-icon>add_circle_outline</mat-icon></p>
+                <p style="margin-bottom: 2px; margin-left: 5px;">Especialidades seleccionadas: {{auxEspecialidades}}</p>
+            </div>
+
+            <div *ngIf="mostrarNuevaEspecialidad">
+                <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+                <form [formGroup]="formEspecialidad" (ngSubmit)="onGuardarEspecialidad()" class="nuevo-form">
+                  <div class="mb-3">
+                    <label class="form-label">NUEVA ESPECIALIDAD: </label>
+                    <input type="text" class="form-control2" formControlName="especialidad">
+                  </div>
+                  <div style="align-items: center; display: flex;">
+                    <input type="submit" value="Guardar" class="btn-76" style="margin-right: 5%;">
+                  </div>
+                </form>
+            </div>
+
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
 
             <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
 
@@ -81,17 +119,6 @@
             
             <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
 
-            <div *ngIf="mostrarEspecialidad">
-                Especialidad: 
-                <select [(ngModel)]="opcionSeleccionada" (ngModelChange)="seleccionarOpcion()" [ngModelOptions]="{ standalone: true }">
-                    <option value="">Selecciona una opción</option>
-                    <option *ngFor="let item of lista" [value]="item.especialidad">{{ item.especialidad }}</option>
-                    <option value="Nuevo">Nuevo</option>
-                </select>
-            </div>
-
-            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-            
             <div style="align-items: center; display: flex;">
                 <a href="#" (click)="yaEsUsuario()" style="color: white; width: 100%;" class="link">¿Ya tienes una cuenta? ¡Inicia sesión aquí!</a>                
             </div>
@@ -111,17 +138,6 @@
             <input type="file" (change)="onFileChange($event)">
         </div> -->
 
-        <div *ngIf="mostrarNuevaEspecialidad">
-            <form [formGroup]="formEspecialidad" (ngSubmit)="onGuardarEspecialidad()" class="nuevo-form">
-              <div class="mb-3">
-                <label class="form-label">NUEVA ESPECIALIDAD: </label>
-                <input type="text" class="form-control2" formControlName="especialidad">
-              </div>
-              <div style="align-items: center; display: flex;">
-                <input type="submit" value="Guardar" class="btn-76" style="margin-right: 5%;">
-              </div>
-            </form>
-        </div>
     </div>
     <div *ngIf="mostrarSpinner">
         <app-spinner></app-spinner>

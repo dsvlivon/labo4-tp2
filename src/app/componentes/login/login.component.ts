@@ -12,7 +12,7 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, FormsModule, MatCheckboxModule, NavbarComponent, SpinnerComponent ],
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule, MatCheckboxModule, NavbarComponent, SpinnerComponent, SpinnerComponent ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -104,13 +104,18 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    
     this.userService.login(this.formLogin.value)
       .then((response: any) => {
         if(response.user.emailVerified){
           const email = response.user.email;
           localStorage.setItem('user', email);
           // console.log("data log: ", this.usuario)
-          this.router.navigate(['/home']);
+          this.mostrarSpinner = true;
+          setTimeout(() => {
+            this.mostrarSpinner = false ;
+            this.router.navigate(['/home']);
+          },1500);
         } else { 
           let error = {"code":"verificacion"}
           this.setMensaje(error);

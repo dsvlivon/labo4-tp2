@@ -11,22 +11,24 @@ import { MisHorarios } from '../../models/misHorarios';
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })
-export class MiPerfilComponent implements OnInit{
+export class MiPerfilComponent implements OnInit {
   usuario: any;
   email: any = "";
   tipo: any = "";
   horarios: any[] = [];
   isEspecialista: boolean = true;
   horariosSeleccionados: string[] = [];
-  misHorarios: any[] = [];
+  misHorarios: { [key: string]: any[] } = {};
+  dias: string[] = ['Lunes', 'Martes','Miercoles','Jueves','Viernes','Sabado'];
   id: string = "";
+  idHorarios = "";
+  celdasElegidas: { [key: string]: string[] } = {};
 
   constructor(
     private fireStore: FirebaseService,
     private router: Router
   ) {}
 
-  
   ngOnInit(): void {
     this.getDatos();
   }
@@ -38,42 +40,66 @@ export class MiPerfilComponent implements OnInit{
       this.id = this.usuario.id;
       this.tipo = this.usuario.tipoUsuario;
       this.isEspecialista = (this.usuario.tipoUsuario === 'especialista');
-      // console.log('Usuario:', this.usuario);
-      // console.log("tipo usuario:", this.usuario.tipoUsuario);
-   
+      
       this.fireStore.obtenerDatoPorCriterio('misHorarios', 'especialista', this.id).subscribe(data => {
-        this.misHorarios = data[0];
-        console.log("misHorarios: ", this.misHorarios);
+        this.misHorarios = data[0].misHorarios;
+        this.idHorarios = data[0].id;
+        console.log("misHorarios lectura: ", this.idHorarios, this.misHorarios);
+        this.inicializarCeldasElegidas();
       });
     });  
     this.generarHorarios();
-    this.marcarHorariosDisponibles();
+  }
+
+  inicializarCeldasElegidas() {
+    this.celdasElegidas = { ...this.misHorarios };
   }
 
   goHome() { 
     this.router.navigate(['/home']);
   }
 
+  isSelected(dia: string, time: string): boolean {
+    return this.celdasElegidas[dia] && this.celdasElegidas[dia].includes(time);
+  }
 
   generarHorarios() {
     const intervalosMinutos = 30;
     const horaInicio = 9;
-    const horaFin = 18;
+    const horaFin = 17.5;
 
     for (let hora = horaInicio; hora < horaFin; hora++) {
       for (let minutos = 0; minutos < 60; minutos += intervalosMinutos) {
         const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
         const minutosFormateados = minutos < 10 ? `0${minutos}` : `${minutos}`;
-        let horario = `${horaFormateada}:${minutosFormateados}`;
-
-        this.horarios.push(horario);
+        const horario = `${horaFormateada}:${minutosFormateados}`;
+        this.horarios.push(this.convertTo12HourFormat(horario));
       }
     }
   }
 
+  mostrarMisHorarios(dia: string, horario: string): void {
+    if (!this.celdasElegidas[dia]) {
+      this.celdasElegidas[dia] = [];
+    }
+    const index = this.celdasElegidas[dia].indexOf(horario);
+    if (index > -1) {
+      this.celdasElegidas[dia].splice(index, 1);
+    } else {
+      this.celdasElegidas[dia].push(horario);
+    }
+    console.log('celdas:', this.celdasElegidas);
+  }
+
+  convertTo12HourFormat(time: string): string {
+    const [hour, minute] = time.split(':').map(Number);
+    const period = hour < 12 ? 'AM' : 'PM';
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${minute.toString().padStart(2, '0')} ${period}`;
+  }
+
   seleccionarHorario(horario: string) {
     const index = this.horariosSeleccionados.indexOf(horario);
-    // console.log("horario selec.: ", horario)
     if (index === -1) {
       this.horariosSeleccionados.push(horario);
     } else {
@@ -86,28 +112,22 @@ export class MiPerfilComponent implements OnInit{
   }
 
   confirmar() {
-    if (this.horariosSeleccionados.length === 0) {
-      // console.log('Faltan datos para crear los horarios');
+    if (Object.keys(this.celdasElegidas).length === 0) {
+      console.log('Faltan datos para crear los horarios');
     } else {
-      const obj: MisHorarios = {
-        especialista: this.usuario.id,
-        misHorarios: this.horariosSeleccionados
+      const obj = {
+        'especialista': this.usuario.id,
+        'misHorarios': this.celdasElegidas
       };
-      this.fireStore.setData(obj, 'misHorarios');   
-      // console.log('Reserva de Horarios creada:', obj);      
+      if(this.idHorarios != "") { 
+        this.fireStore.actualizarHorarios('misHorarios', this.idHorarios, this.celdasElegidas); 
+      } else { 
+        this.fireStore.setData(obj, 'misHorarios'); 
+      }
+      
+      console.log('Reserva de Horarios creada:', obj);
     }
   }
-  
-  marcarHorariosDisponibles() {
-    this.horarios.forEach(horario => {
-      if (this.misHorarios.includes(horario)) {
-        const button = document.getElementById(`horario-${horario.replace(':', '-')}`);
-        if (button) {
-          button.classList.add('disponible');
-        }
-      }
-    });
-  }
-  
-  cancelar(){}
+
+  cancelar() {}
 }
