@@ -1,0 +1,58 @@
+.expande-colapsa {
+    overflow: hidden;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(92, 195, 227, 0.8);
+    width: 0;
+    height: 50%;
+    border-radius: 10px;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px solid;
+    border-color: rgb(187, 187, 187);
+    transition: width 1s ease-in-out;
+  }
+  
+  .expande-colapsa.expandido {
+    width: 60%;
+    transition: width 1s ease-in-out;
+  }
+  
+  .expande-colapsa.colapsado {
+    width: 0;
+    transition: width 1s ease-in-out;
+  }
+  
+.scale-out-vertical {
+	-webkit-animation: scale-out-vertical 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: scale-out-vertical 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+@-webkit-keyframes scale-out-vertical {
+    0% {
+      -webkit-transform: scaleY(1);
+              transform: scaleY(1);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: scaleY(0);
+              transform: scaleY(0);
+      opacity: 1;
+    }
+  }
+  @keyframes scale-out-vertical {
+    0% {
+      -webkit-transform: scaleY(1);
+              transform: scaleY(1);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: scaleY(0);
+              transform: scaleY(0);
+      opacity: 1;
+    }
+  }
+  

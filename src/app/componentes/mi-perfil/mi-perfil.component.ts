@@ -3,11 +3,12 @@ import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MisHorarios } from '../../models/misHorarios';
+import { CartelinComponent } from '../cartelin/cartelin.component';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CartelinComponent],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })
@@ -23,6 +24,7 @@ export class MiPerfilComponent implements OnInit {
   id: string = "";
   idHorarios = "";
   celdasElegidas: { [key: string]: string[] } = {};
+  mostrarCartelin: boolean = false;
 
   constructor(
     private fireStore: FirebaseService,
@@ -42,10 +44,16 @@ export class MiPerfilComponent implements OnInit {
       this.isEspecialista = (this.usuario.tipoUsuario === 'especialista');
       
       this.fireStore.obtenerDatoPorCriterio('misHorarios', 'especialista', this.id).subscribe(data => {
-        this.misHorarios = data[0].misHorarios;
-        this.idHorarios = data[0].id;
-        console.log("misHorarios lectura: ", this.idHorarios, this.misHorarios);
-        this.inicializarCeldasElegidas();
+        if (data && data.length > 0) {
+          this.misHorarios = data[0].misHorarios || {};
+          this.idHorarios = data[0].id || null;
+          console.log("misHorarios lectura: ", this.idHorarios, this.misHorarios);
+          this.inicializarCeldasElegidas();
+        } else {
+          console.log("No se encontraron horarios para el especialista.");
+          this.misHorarios = {};
+          this.idHorarios = "";
+        }
       });
     });  
     this.generarHorarios();
@@ -126,8 +134,18 @@ export class MiPerfilComponent implements OnInit {
       }
       
       console.log('Reserva de Horarios creada:', obj);
+      this.showCartelin();
+      
     }
   }
 
-  cancelar() {}
+  showCartelin() {
+    this.mostrarCartelin = true;
+    setTimeout(() => {
+      this.mostrarCartelin = false;
+      this.router.navigateByUrl('/home', { replaceUrl: true });
+    }, 2000);
+  }
+
+  cancelar(){}
 }

@@ -11,11 +11,12 @@ import { CloudStorageService } from '../../services/cloud-storage.service';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { Turnos } from '../../models/turnos.interface';
 import { MatIconModule } from '@angular/material/icon';
+import { CartelinComponent } from '../cartelin/cartelin.component';
 
 @Component({
   selector: 'app-turnos',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, MatIconModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent ],
+  imports: [ CommonModule, ReactiveFormsModule, MatIconModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent, CartelinComponent ],
   templateUrl: './turnos.component.html',
   styleUrl: './turnos.component.css'
 })
@@ -29,6 +30,7 @@ export class TurnosComponent implements OnInit{
   mostrarEspecialista: boolean = false;
   mostrarDia: boolean = false;
   mostrarHorario: boolean = false;
+  mostrarCartelin: boolean = false;
 
   fechaHoy: string = "";
   diaHoy: string = "";
@@ -44,10 +46,13 @@ export class TurnosComponent implements OnInit{
   especialistas: any[] = [];
   turnos: any[] = [];
   
-  dias: string[] = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  dias: string[] = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];
   email: any = "";
   usuario: any;
   esAdmin: boolean = false;
+
+  idHorarios = "";
+  misHorarios: { [key: string]: any[] } = {};
 
   constructor(
     private fireStore: FirebaseService,
@@ -58,36 +63,35 @@ export class TurnosComponent implements OnInit{
     this.getDatos();
   }
 
-  getDatos() {
-    
+  getDatos() {    
     this.fechaHoy = this.obtenerFechaHoy();
     this.diaHoy = this.obtenerDiaSemana(new Date());
     // console.log("Hoy: ", this.diaHoy + " - " + this.fechaHoy);
-
-    this.calcularQuincena();
-
+ 
     this.email = localStorage.getItem('user');
     this.fireStore.obtenerDatoPorCriterio('usuarios', 'email', this.email).subscribe(data => {
       this.usuario = data[0];
       console.log('Usuario:', this.usuario);
-    });    
-
-    // this.fireStore.obtenerDato('especialidades').subscribe(respuesta => {
-    //   this.listaEspecialidades = respuesta;
-    //   this.auxListaEspecialidades = this.listaEspecialidades;
-    //   // console.log("especialidades: ", this.listaEspecialidades);
-    // });
-
-    this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
-      this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
-      this.auxListaEspecialistas = this.listaEspecialistas;
-      // console.log("especialistas: ", this.listaEspecialistas);
+      });    
+      
+      // this.fireStore.obtenerDato('especialidades').subscribe(respuesta => {
+        //   this.listaEspecialidades = respuesta;
+        //   this.auxListaEspecialidades = this.listaEspecialidades;
+        //   // console.log("especialidades: ", this.listaEspecialidades);
+        // });
+        
+        this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
+          this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
+          this.auxListaEspecialistas = this.listaEspecialistas;
+          // console.log("especialistas: ", this.listaEspecialistas);
     });
 
     this.fireStore.obtenerDato('turnos').subscribe(respuesta => {
       this.turnos = respuesta;
       console.log("turnos: ", this.turnos);
-    });
+      });
+  
+    this.calcularQuincena();
   }
 
   verificarDisponibilidadEspecialista(horario: any): boolean {
@@ -101,7 +105,25 @@ export class TurnosComponent implements OnInit{
     }
     return true;
   }
+
+  verificarDisponibilidadEspecialista2() {
+    let horariosDisponibles = [...this.horarios];
   
+    for (const turno of this.turnos) {
+      if (this.especialistaSeleccionado.id === turno.especialista.id) {
+        const dia = this.diaSeleccionado.dia + " " + this.diaSeleccionado.fecha;
+        horariosDisponibles = horariosDisponibles.filter(horario =>
+          !(turno.dia === dia && turno.hora === horario)
+        );
+      }
+    }
+  
+    this.horarios = horariosDisponibles;
+  }
+  
+  verificarDias(){
+
+  }
 
   calcularQuincena() {
     const hoy = new Date();
@@ -113,6 +135,12 @@ export class TurnosComponent implements OnInit{
       const diaSemana = this.obtenerDiaSemana(nuevaFecha);
       this.fechasQuincena.push({ fecha: fechaFormateada, dia: diaSemana });
     }
+  }
+
+  verificarDiasEnMisHorarios() {
+    const diasEnMisHorarios = Object.keys(this.misHorarios);
+    this.fechasQuincena = this.fechasQuincena.filter(fecha => diasEnMisHorarios.includes(fecha.dia));
+      console.log("Fechas de la quincena después de filtrar:", this.fechasQuincena);
   }
 
   generarHorarios() {
@@ -131,6 +159,31 @@ export class TurnosComponent implements OnInit{
       }
     }  
   }
+
+  obtenerHorarios() {
+    this.fireStore.obtenerDatoPorCriterio('misHorarios', 'especialista', this.especialistaSeleccionado.id).subscribe(data => {
+      if (data && data.length > 0) {
+        this.misHorarios = data[0].misHorarios || {};
+        this.idHorarios = data[0].id || null;
+  
+        if (this.diaSeleccionado && this.misHorarios[this.diaSeleccionado.dia]) {
+          this.horarios = this.misHorarios[this.diaSeleccionado.dia];
+          this.verificarDisponibilidadEspecialista2();
+          console.log(`Horarios para ${this.diaSeleccionado.dia}:`, this.horarios);
+        } else {
+          console.log("No se encontraron horarios para el día seleccionado en misHorarios.");
+          this.generarHorarios();
+          this.horarios = [];
+        }
+      } else {
+        console.log("No se encontraron horarios para el especialista.");
+        this.generarHorarios();
+        this.idHorarios = "";
+      }
+      this.verificarDiasEnMisHorarios();
+    });
+  }
+  
 
   convertirAMPM(horario: string): string {
     let [hora, minutos] = horario.split(':').map(Number);
@@ -156,7 +209,7 @@ export class TurnosComponent implements OnInit{
     switch (val){
       case "Cardiologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cardiologia.jpg?raw=true';
       break;
-      case "Cirugia de Coxis": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cirugia.jpg?raw=true';
+      case "Cirujia de Coxis": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cirugia.jpg?raw=true';
       break;
       case "Medicina General": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/general.jpg?raw=true';
       break;
@@ -182,6 +235,7 @@ export class TurnosComponent implements OnInit{
 
   seleccionarDia(val: any) {
     this.diaSeleccionado = val;
+    console.log("dia selec.: ", this.diaSeleccionado);
     if (this.diaSeleccionado) {
       if(this.diaSeleccionado === this.diaHoy){
         this.horarios.filter(obj => obj >= this.fechaHoy);
@@ -189,8 +243,7 @@ export class TurnosComponent implements OnInit{
       this.mostrarDia = true;
     } else {
       this.mostrarDia = false;
-    }
-    this.generarHorarios();
+    }    
     this.mostrarHorario = true;
   }
 
@@ -234,6 +287,7 @@ export class TurnosComponent implements OnInit{
 
     // console.log("especialista: ", this.especialistaSeleccionado);
     this.generarEspecialidades();
+    this.obtenerHorarios();
   }
 
   estaSeleccionado(obj: any): boolean {
@@ -260,7 +314,8 @@ export class TurnosComponent implements OnInit{
         paciente: this.usuario
       };
       this.fireStore.setData(obj, 'turnos');   
-      console.log('Nuevo turno creado:', obj);      
+      console.log('Nuevo turno creado:', obj);
+      this.showCartelin();      
     } else {
       console.log('Faltan datos para crear el turno');
     }
@@ -280,5 +335,12 @@ export class TurnosComponent implements OnInit{
 
   goHome() { 
     this.router.navigate(['/home']);
+  }
+
+  showCartelin() {
+    this.mostrarCartelin = true;
+    setTimeout(() => {
+      this.mostrarCartelin = false;
+    }, 2000);
   }
 }

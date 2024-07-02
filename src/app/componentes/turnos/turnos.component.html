@@ -70,7 +70,7 @@
             </select> -->
             <div class="botones-wrapper">
                 <button *ngFor="let item of horarios" (click)="seleccionarHorario(item)" class="btn-horarios">
-                    {{ convertirAMPM(item) }}
+                    {{ item }}
                 </button>
             </div>
         </div>
@@ -101,4 +101,8 @@
 
         <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
     </div>
+</div>
+
+<div *ngIf="mostrarCartelin">
+    <app-cartelin></app-cartelin>
 </div>
