@@ -1,0 +1,187 @@
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .detalle-container {
+    display: flex;
+    align-items: center;
+    background-color: rgb(154, 214, 238);
+    border-radius: 1%;
+    padding: 5%;
+  }
+  
+  .img-container {
+    flex: 1;
+    padding-right: 20px;
+  }
+  
+  .info-container {
+    flex: 2;
+  }
+  
+  .info-container p {
+    margin: 5px 0;
+  }
+  
+  
+  .btn-76,
+  .btn-76 *,
+  .btn-76 :after,
+  .btn-76 :before,
+  .btn-76:after,
+  .btn-76:before {
+    border: 0 solid;
+    box-sizing: border-box;
+  }
+  .btn-76 {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: button;
+    background-color: #000;
+    background-image: none;
+    color: #fff;
+    cursor: pointer;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+      Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+      Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    font-size: 100%;
+    line-height: 1.5;
+    margin: 0;
+    -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
+    padding: 0;
+  }
+  .btn-76:disabled {
+    cursor: default;
+  }
+  .btn-76:-moz-focusring {
+    outline: auto;
+  }
+  .btn-76 svg {
+    display: block;
+    vertical-align: middle;
+  }
+  .btn-76 [hidden] {
+    display: none;
+  }
+  
+  .btn-76 {
+    --neon: #0ea5e9;
+    box-sizing: border-box;
+    display: block;
+    font-weight: 900;
+    -webkit-mask-image: none;
+    outline: 4px solid #fff;
+    outline-offset: -4px;
+    overflow: hidden;
+    padding: 1.2rem 3rem;
+    position: relative;
+    text-transform: uppercase;
+    transition: 0.2s linear 0.1s;
+    width: 40%;
+    margin-left: 30%;
+  }
+  .btn-76:hover {
+    background: var(--neon);
+    box-shadow: 0 0 5px var(--neon), 0 0 25px var(--neon), 0 0 50px var(--neon),
+      0 0 100px var(--neon);
+    color: #fff;
+    outline-color: transparent;
+    transition: 0.2s linear 0.6s;
+  }
+  .btn-76 span {
+    display: block;
+    inset: 0;
+    position: absolute;
+  }
+  .btn-76 .top {
+    border-top: 4px solid var(--neon);
+    opacity: 0;
+    transform: translateX(calc(-100% + var(--progress, 0%)));
+    transition: none;
+  }
+  .btn-76:hover .top {
+    --progress: 100%;
+    opacity: 1;
+    transition: transform 0.2s linear;
+  }
+  .btn-76 .right {
+    border-right: 4px solid var(--neon);
+    opacity: 0;
+    transform: translateY(calc(-100% + var(--progress, 0%)));
+    transition: none;
+  }
+  .btn-76:hover .right {
+    --progress: 100%;
+    opacity: 1;
+    transition: transform 0.2s linear 0.2s;
+  }
+  .btn-76 .bottom {
+    border-bottom: 4px solid var(--neon);
+    opacity: 0;
+    transform: translateX(calc(100% - var(--progress, 0%)));
+    transition: none;
+  }
+  .btn-76:hover .bottom {
+    --progress: 100%;
+    opacity: 1;
+    transition: transform 0.2s linear 0.4s;
+  }
+  .btn-76 .left {
+    border-left: 4px solid var(--neon);
+    opacity: 0;
+    transform: translateY(calc(100% - var(--progress, 0%)));
+    transition: none;
+  }
+  .btn-76:hover .left {
+    --progress: 100%;
+    opacity: 1;
+    transition: transform 0.2s linear 0.6s;
+  }
+  
+  .obj-pic {
+    width: auto;
+    height: 200px; 
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+   
+    text-align: center;
+  }
+  

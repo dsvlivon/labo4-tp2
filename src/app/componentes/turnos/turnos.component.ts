@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from '../../services/firebase.service';
-import { MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { CloudStorageService } from '../../services/cloud-storage.service';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { Turnos } from '../../models/turnos.interface';
@@ -16,11 +16,11 @@ import { CartelinComponent } from '../cartelin/cartelin.component';
 @Component({
   selector: 'app-turnos',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule, MatIconModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent, CartelinComponent ],
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule, FormsModule, MatCheckboxModule, MatButtonToggleModule, SpinnerComponent, CartelinComponent],
   templateUrl: './turnos.component.html',
   styleUrl: './turnos.component.css'
 })
-export class TurnosComponent implements OnInit{
+export class TurnosComponent implements OnInit {
   diaSeleccionado: any;
   horarioSeleccionado: any;
   especialistaSeleccionado: any;
@@ -36,7 +36,8 @@ export class TurnosComponent implements OnInit{
   diaHoy: string = "";
   mesHoy: string = "";
   horarios: string[] = [];
-  
+  horariosDisponibles: string[] = [];
+
   listaEspecialidades: any[] = [];
   auxListaEspecialidades: any[] = [];
   listaEspecialistas: any[] = [];
@@ -45,8 +46,8 @@ export class TurnosComponent implements OnInit{
   especialidades: string[] = [];
   especialistas: any[] = [];
   turnos: any[] = [];
-  
-  dias: string[] = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];
+
+  dias: string[] = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
   email: any = "";
   usuario: any;
   esAdmin: boolean = false;
@@ -57,133 +58,29 @@ export class TurnosComponent implements OnInit{
   constructor(
     private fireStore: FirebaseService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getDatos();
   }
 
-  getDatos() {    
+  getDatos() {
     this.fechaHoy = this.obtenerFechaHoy();
     this.diaHoy = this.obtenerDiaSemana(new Date());
     // console.log("Hoy: ", this.diaHoy + " - " + this.fechaHoy);
- 
+
     this.email = localStorage.getItem('user');
     this.fireStore.obtenerDatoPorCriterio('usuarios', 'email', this.email).subscribe(data => {
       this.usuario = data[0];
       console.log('Usuario:', this.usuario);
-      });    
-      
-      // this.fireStore.obtenerDato('especialidades').subscribe(respuesta => {
-        //   this.listaEspecialidades = respuesta;
-        //   this.auxListaEspecialidades = this.listaEspecialidades;
-        //   // console.log("especialidades: ", this.listaEspecialidades);
-        // });
-        
-        this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
-          this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
-          this.auxListaEspecialistas = this.listaEspecialistas;
-          // console.log("especialistas: ", this.listaEspecialistas);
     });
 
-    this.fireStore.obtenerDato('turnos').subscribe(respuesta => {
-      this.turnos = respuesta;
-      console.log("turnos: ", this.turnos);
-      });
-  
-    this.calcularQuincena();
-  }
-
-  verificarDisponibilidadEspecialista(horario: any): boolean {
-    for (const turno of this.turnos) {
-      if (this.especialistaSeleccionado.id === turno.especialista.id) {
-        const dia = this.diaSeleccionado.dia + " " + this.diaSeleccionado.fecha;
-        if (turno.dia === dia && turno.hora === horario) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  verificarDisponibilidadEspecialista2() {
-    let horariosDisponibles = [...this.horarios];
-  
-    for (const turno of this.turnos) {
-      if (this.especialistaSeleccionado.id === turno.especialista.id) {
-        const dia = this.diaSeleccionado.dia + " " + this.diaSeleccionado.fecha;
-        horariosDisponibles = horariosDisponibles.filter(horario =>
-          !(turno.dia === dia && turno.hora === horario)
-        );
-      }
-    }
-  
-    this.horarios = horariosDisponibles;
-  }
-  
-  verificarDias(){
-
-  }
-
-  calcularQuincena() {
-    const hoy = new Date();
-    for (let i = 0; i < 15; i++) {
-      const nuevaFecha = new Date(hoy);
-      nuevaFecha.setDate(hoy.getDate() + i);
-      const fechaFormateada = formatDate(nuevaFecha, 'dd-MM-YYYY', 'en-AR');
-      this.mesHoy = formatDate(nuevaFecha, 'MM', 'en-AR');
-      const diaSemana = this.obtenerDiaSemana(nuevaFecha);
-      this.fechasQuincena.push({ fecha: fechaFormateada, dia: diaSemana });
-    }
-  }
-
-  verificarDiasEnMisHorarios() {
-    const diasEnMisHorarios = Object.keys(this.misHorarios);
-    this.fechasQuincena = this.fechasQuincena.filter(fecha => diasEnMisHorarios.includes(fecha.dia));
-      console.log("Fechas de la quincena después de filtrar:", this.fechasQuincena);
-  }
-
-  generarHorarios() {
-    const intervalosMinutos = 30;
-    const horaInicio = 9;
-    const horaFin = 18;
-
-    for (let hora = horaInicio; hora < horaFin; hora++) {
-      for (let minutos = 0; minutos < 60; minutos += intervalosMinutos) {
-        const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
-        const minutosFormateados = minutos < 10 ? `0${minutos}` : `${minutos}`;
-        let horario = `${horaFormateada}:${minutosFormateados}`;
-        if (this.verificarDisponibilidadEspecialista(horario)) {
-            this.horarios.push(horario);
-        }
-      }
-    }  
-  }
-
-  obtenerHorarios() {
-    this.fireStore.obtenerDatoPorCriterio('misHorarios', 'especialista', this.especialistaSeleccionado.id).subscribe(data => {
-      if (data && data.length > 0) {
-        this.misHorarios = data[0].misHorarios || {};
-        this.idHorarios = data[0].id || null;
-  
-        if (this.diaSeleccionado && this.misHorarios[this.diaSeleccionado.dia]) {
-          this.horarios = this.misHorarios[this.diaSeleccionado.dia];
-          this.verificarDisponibilidadEspecialista2();
-          console.log(`Horarios para ${this.diaSeleccionado.dia}:`, this.horarios);
-        } else {
-          console.log("No se encontraron horarios para el día seleccionado en misHorarios.");
-          this.generarHorarios();
-          this.horarios = [];
-        }
-      } else {
-        console.log("No se encontraron horarios para el especialista.");
-        this.generarHorarios();
-        this.idHorarios = "";
-      }
-      this.verificarDiasEnMisHorarios();
+    this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
+      this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
+      this.auxListaEspecialistas = this.listaEspecialistas;
+      // console.log("especialistas: ", this.listaEspecialistas);
     });
   }
-  
 
   convertirAMPM(horario: string): string {
     let [hora, minutos] = horario.split(':').map(Number);
@@ -191,36 +88,36 @@ export class TurnosComponent implements OnInit{
     hora = hora % 12 || 12; // Convertir 0 o 12 a 12 para AM/PM
     const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
     return `${horaFormateada}:${minutos < 10 ? `0${minutos}` : minutos} ${periodo}`;
-}
+  }
 
   generarEspecialidades() {
     this.listaEspecialidades = []; // Reset listaEspecialidades
     if (this.especialistaSeleccionado && Array.isArray(this.especialistaSeleccionado.especialidad)) {
-        this.especialistaSeleccionado.especialidad.forEach((element: any) => {
-            this.listaEspecialidades.push(element);
-        });
+      this.especialistaSeleccionado.especialidad.forEach((element: any) => {
+        this.listaEspecialidades.push(element);
+      });
     } else {
-        console.error("especialistaSeleccionado no tiene una propiedad especialidad válida");
+      console.error("especialistaSeleccionado no tiene una propiedad especialidad válida");
     }
     // console.log("Especialidades disponibles:", this.listaEspecialidades);
   }
 
-  obtenerImagen(val: string){
-    switch (val){
+  obtenerImagen(val: string) {
+    switch (val) {
       case "Cardiologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cardiologia.jpg?raw=true';
-      break;
+        break;
       case "Cirujia de Coxis": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cirugia.jpg?raw=true';
-      break;
+        break;
       case "Medicina General": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/general.jpg?raw=true';
-      break;
+        break;
       case "Ginecologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/ginecologia.jpg?raw=true';
-      break;
+        break;
       case "Rayos Rimpi": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/rayos.jpg?raw=true';
-      break;
+        break;
       case "Urologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/urologia.jpg?raw=true';
-      break;
+        break;
       default: return 'https://github.com/dsvlivon/imagenes/blob/main/botones/default.jpg';
-      break;
+        break;
     }
   }
 
@@ -231,30 +128,6 @@ export class TurnosComponent implements OnInit{
 
   obtenerDiaSemana(fecha: Date): string {
     return this.dias[fecha.getDay()];
-  }
-
-  seleccionarDia(val: any) {
-    this.diaSeleccionado = val;
-    console.log("dia selec.: ", this.diaSeleccionado);
-    if (this.diaSeleccionado) {
-      if(this.diaSeleccionado === this.diaHoy){
-        this.horarios.filter(obj => obj >= this.fechaHoy);
-      }
-      this.mostrarDia = true;
-    } else {
-      this.mostrarDia = false;
-    }    
-    this.mostrarHorario = true;
-  }
-
-  seleccionarHorario(val: any) {
-    // console.log("Opción seleccionada:", this.horarioSeleccionado);
-    this.horarioSeleccionado = val
-    if (this.horarioSeleccionado) {
-      this.mostrarHorario = true;
-    } else {
-      this.mostrarHorario = false;
-    }
   }
 
   seleccionarEspecialidad(especialidad: string) {
@@ -269,12 +142,12 @@ export class TurnosComponent implements OnInit{
       this.mostrarDia = false;
     }
     if (this.especialidadSeleccionada === "Todos") {
-      this.refrescar(); 
+      this.refrescar();
     }
   }
-  
+
   seleccionarEspecialista(obj: any) {
-    if(this.especialistaSeleccionado != obj && this.especialistaSeleccionado!= null) {
+    if (this.especialistaSeleccionado != obj && this.especialistaSeleccionado != null) {
       this.listaEspecialidades = this.auxListaEspecialidades;
     }
 
@@ -287,8 +160,74 @@ export class TurnosComponent implements OnInit{
 
     // console.log("especialista: ", this.especialistaSeleccionado);
     this.generarEspecialidades();
-    this.obtenerHorarios();
+    // this.obtenerHorarios();
+    this.obtenerdiasFiltrados();
   }
+
+  obtenerdiasFiltrados() {
+    this.generarHorarios();
+    this.fireStore.obtenerDatoPorCriterio('misHorarios', 'especialista', this.especialistaSeleccionado.id).subscribe(data => {
+      if (data && data.length > 0) {
+        this.misHorarios = data[0].misHorarios || {};
+        this.idHorarios = data[0].id || null;
+      }
+      setTimeout(() => {
+        this.fireStore.obtenerDatoPorCriterio('turnos', 'especialista.id', this.especialistaSeleccionado.id).subscribe(data => {
+          if (data && data.length > 0) {
+            this.turnos = data || {};
+          } else {
+            console.log("No se encontraron turnos para el especialista:", this.especialistaSeleccionado.id);
+          }
+        // this.fechasQuincena.filter{}
+        console.log("quincena: ", this.fechasQuincena);
+        // .filter{}
+        console.log("horarios :", this.horarios);
+        console.log("misHorarios :", this.misHorarios);
+        console.log("turnos :", this.turnos);
+        this,this.calcularQuincena();
+      })  }, 1000);      
+    });
+  }
+
+  generarHorarios() {
+    const intervalosMinutos = 30;
+    const horaInicio = 9;
+    const horaFin = 18;
+
+    this.horarios = [];
+
+    // Genera los horarios disponibles
+    for (let hora = horaInicio; hora < horaFin; hora++) {
+      for (let minutos = 0; minutos < 60; minutos += intervalosMinutos) {
+        const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
+        const minutosFormateados = minutos < 10 ? `0${minutos}` : `${minutos}`;
+        let horario = `${horaFormateada}:${minutosFormateados}`;
+          this.horarios.push(horario);
+      }
+    }
+  }
+
+  calcularQuincena() {
+    const hoy = new Date();
+    let diasValidosGenerados = 0;
+    let diasTotales = 0;
+    this.fechasQuincena = [];
+  
+    while (diasValidosGenerados < 15) {
+      const nuevaFecha = new Date(hoy);
+      nuevaFecha.setDate(hoy.getDate() + diasTotales);
+      const fechaFormateada = formatDate(nuevaFecha, 'dd-MM-YYYY', 'en-AR');
+      this.mesHoy = formatDate(nuevaFecha, 'MM', 'en-AR');
+      const diaSemana = this.obtenerDiaSemana(nuevaFecha);
+  
+      if (this.misHorarios[diaSemana]) {
+        this.fechasQuincena.push({ fecha: fechaFormateada, dia: diaSemana });
+        diasValidosGenerados++;
+      }
+      diasTotales++; // Avanza al siguiente día en cualquier caso
+    }
+  }
+   
 
   estaSeleccionado(obj: any): boolean {
     // Lógica para verificar si el especialista está seleccionado
@@ -308,14 +247,14 @@ export class TurnosComponent implements OnInit{
       const obj: Turnos = {
         especialidad: this.especialidadSeleccionada,
         especialista: this.especialistaSeleccionado,
-        dia:`${this.diaSeleccionado.dia} ${this.diaSeleccionado.fecha}`,
+        dia: `${this.diaSeleccionado.dia} ${this.diaSeleccionado.fecha}`,
         hora: this.horarioSeleccionado,
         estado: 'Pendiente', // por default
         paciente: this.usuario
       };
-      this.fireStore.setData(obj, 'turnos');   
+      this.fireStore.setData(obj, 'turnos');
       console.log('Nuevo turno creado:', obj);
-      this.showCartelin();      
+      this.showCartelin();
     } else {
       console.log('Faltan datos para crear el turno');
     }
@@ -333,7 +272,7 @@ export class TurnosComponent implements OnInit{
     this.mostrarHorario = false;
   }
 
-  goHome() { 
+  goHome() {
     this.router.navigate(['/home']);
   }
 
@@ -342,5 +281,26 @@ export class TurnosComponent implements OnInit{
     setTimeout(() => {
       this.mostrarCartelin = false;
     }, 2000);
+  }
+
+  seleccionarHorario(val: any) {
+    // console.log("Opción seleccionada:", this.horarioSeleccionado);
+    this.horarioSeleccionado = val
+    if (this.horarioSeleccionado) {
+      this.mostrarHorario = true;
+    } else {
+      this.mostrarHorario = false;
+    }
+  }
+
+  seleccionarDia(val: any) {
+    this.diaSeleccionado = val;
+    console.log("Día seleccionado: ", this.diaSeleccionado);
+    if (this.diaSeleccionado) {
+      this.mostrarDia = true;
+    } else {
+      this.mostrarDia = false;
+    }
+    this.mostrarHorario = true;
   }
 }

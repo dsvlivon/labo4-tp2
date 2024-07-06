@@ -51,6 +51,15 @@ export class FirebaseService {
     });
   }
 
+  actualizarTurnos(coleccion: string, id: string, estado: string, comentario?: string) {
+    const dataRef = doc(this.fireStore, coleccion, id);
+    const updateData: any = { estado };
+    if (comentario) {
+      updateData.comentario = comentario;
+    }
+    return updateDoc(dataRef, updateData);
+  }
+
 
   deleteDato(obj: any, collection: string) {
     const docRef = doc(this.fireStore, collection, obj.id);

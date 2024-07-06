@@ -1,1 +1,43 @@
-<p>mis-turnos works!</p>
+<!-- <p>mis-turnos works!</p> -->
+<table mat-table [dataSource]="turnos" style ="background-color: darkslategrey" class="mat-elevation-z8">
+    <ng-container matColumnDef="Estado">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <!-- <td mat-cell *matCellDef="let obj">  </td> -->
+        <td mat-cell *matCellDef="let obj" [appEstadoTurno]="obj.estado">{{obj.estado}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Dia">
+        <th mat-header-cell *matHeaderCellDef> Dia </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.dia}} </td>
+    </ng-container>
+        
+    <ng-container matColumnDef="Hora">  
+        <th mat-header-cell *matHeaderCellDef> Hora </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.hora}} </td>
+    </ng-container>
+      
+    <ng-container matColumnDef="Especialidad">
+        <th mat-header-cell *matHeaderCellDef> Especialidad </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.especialidad}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Especialista">
+      <th mat-header-cell *matHeaderCellDef> Especialista </th>
+      <td mat-cell *matCellDef="let obj"> {{obj.especialista.nombre}} {{obj.especialista.apellido}} </td>
+    </ng-container>  
+  
+    <ng-container matColumnDef="Paciente">
+      <th mat-header-cell *matHeaderCellDef> Paciente </th>
+      <td mat-cell *matCellDef="let obj"> {{obj.paciente.nombre}} {{obj.paciente.apellido}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Obra Social">
+        <th mat-header-cell *matHeaderCellDef> Obra Social </th>
+        <td mat-cell *matCellDef="let obj"> {{obj.paciente.obraSocial}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let obj; columns: columnas;" (click)="emitirDetalles(obj)"></tr>
+</table>
+
+<app-detalle-turno [obj]="selectedObj" *ngIf="mostrarDetalle"></app-detalle-turno>

@@ -9,11 +9,12 @@ import { MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
 import { HabilitarUsuariosComponent } from '../habilitar-usuarios/habilitar-usuarios.component';
 import { RegistroComponent } from '../registro/registro.component';
+import { MisTurnosComponent } from '../mis-turnos/mis-turnos.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent, RegistroComponent],
+  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent, RegistroComponent, MisTurnosComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit{
   mostrarHabilitar: boolean = false;
   mostrarRegistro: boolean = false;
   mostrarTurnos: boolean = true;
+  mostrarMisTurnos: boolean = false;
   esAdmin: boolean = false;
   email: any;
   usuario: any;
@@ -50,6 +52,7 @@ export class HomeComponent implements OnInit{
         }
         if(this.usuario.tipoUsuario === 'especialista') {
           this.mostrarTurnos = false;
+          this.mostrarMisTurnos = true;
         }
       }
       // console.log('Usuariox:', this.usuario);
@@ -83,7 +86,7 @@ export class HomeComponent implements OnInit{
     this.router.navigate(['/turnos'], { replaceUrl: true });
   }
   goMisTurnos() {
-    this.router.navigate(['/misTurnos'], { replaceUrl: true });
+    this.mostrarMisTurnos = !this.mostrarMisTurnos;
   }
 
   goUsuarios() {

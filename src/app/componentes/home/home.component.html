@@ -11,7 +11,7 @@
     <div class="der">
         <ul class="nav-links">
             <li><a (click)="goMiPerfil()" title="Mi Perfil" *ngIf="!mostrarConfirmacion"><mat-icon>person_outline</mat-icon></a></li>
-            <li><a (click)="goEncuestas()" title="Encuestas" *ngIf="!mostrarConfirmacion"><mat-icon>equalizer</mat-icon></a></li>
+            <!-- <li><a (click)="goEncuestas()" title="Encuestas" *ngIf="!mostrarConfirmacion"><mat-icon>equalizer</mat-icon></a></li> -->
             
             <li><a (click)="goRegistro()" title="Alta de Usaurios" *ngIf="esAdmin"><mat-icon>add_circle_outline</mat-icon></a></li>
             <li><a (click)="goTurnos()" title="Solicitar Turnos" *ngIf="mostrarTurnos" ><mat-icon>event</mat-icon></a></li>
@@ -31,6 +31,10 @@
 
 <div *ngIf="mostrarRegistro">
     <app-registro></app-registro>
+</div>
+
+<div *ngIf="mostrarMisTurnos">
+    <app-mis-turnos></app-mis-turnos>
 </div>
 
 

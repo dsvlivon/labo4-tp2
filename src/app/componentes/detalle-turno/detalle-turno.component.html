@@ -1,0 +1,54 @@
+<div class="modal" *ngIf="mostrarDetalle">
+    <div class="modal-content">
+        <span class="close" (click)="cerrarModal()">&times;</span>
+        <h2>Detalles del Especialista</h2>
+        <h3><strong>Estado:</strong> {{ obj.estado }}</h3>
+        <div *ngIf="obj" class="detalle-container">
+
+            <div class="img-container">
+                <img [src]="obj.paciente.imagen1" alt="{{obj.paciente.nombre}}" class="obj-pic">
+            </div>
+            <!-- estado, dia, hora, especialidad, especialista, paciente, obra Social -->
+
+            <div class="info-container">
+                <p>Dia: {{ obj.dia }}</p>
+                <p>Hora: {{ obj.hora }}</p>
+                <p>Especialidad: {{ obj.especialidad }}</p>
+                <p>Especialista: {{ obj.especialista.nombre }} {{ obj.especialista.apellido }}</p>
+                <p>Paciente: {{ obj.paciente.nombre }} {{ obj.paciente.apellido }}</p>
+                <p>Obra Social: {{ obj.paciente.obraSocial }}</p>
+            </div>
+
+        </div>
+        <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+        <!-- <input type="text" id="comentario" [(ngModel)]="comentario"> -->
+
+        <div *ngIf="mostrarCompletar">
+            <p>Desea dejar alguna reseña sobre el paciente?</p>
+            <input type="text" id="resena" [(ngModel)]="resena"
+                style="width: 90%; height: 50px; margin-left: 20px;">
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <button class="btn-76" (click)="InteractuarTurno('Realizado')">Completar</button>
+        </div>
+
+        <div *ngIf="mostrarCancelar">
+            <p>Desea dejar algún comentario al respecto?</p>
+            <input type="text" id="comentario" [(ngModel)]="comentario"
+                style="width: 90%; height: 50px; margin-left: 20px;">
+            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+            <button class="btn-76" (click)="InteractuarTurno('Cancelado')">Cancelar</button>
+        </div>
+
+        <div *ngIf="mostrarHabilitar">
+            <button class="btn-76" (click)="InteractuarTurno('Aprobado')">Aprobar</button>
+        </div>
+
+        <div class="acciones">
+            <div *ngIf="mostrarResena"><mat-icon> add_comment</mat-icon>
+                <div *ngIf="mostrarResena"><p>Comentario: {{this.obj.comentario}}</p></div>
+            </div>
+            
+            <div *ngIf="mostrarEncuesta"><mat-icon>poll</mat-icon></div>
+            <div *ngIf="mostrarCalificar"><mat-icon>star_half</mat-icon></div>
+        </div>
+    </div>
