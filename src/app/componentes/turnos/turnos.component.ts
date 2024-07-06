@@ -236,7 +236,7 @@ export class TurnosComponent implements OnInit {
       }
     }
     return false;
-  }
+  } 
 
   calcularQuincena() {
     const hoy = new Date();
@@ -327,6 +327,8 @@ export class TurnosComponent implements OnInit {
   seleccionarDia(val: any) {
     this.diaSeleccionado = val;
     console.log("Día seleccionado: ", this.diaSeleccionado);
+    this.descontarTurnosTomados();
+
     if (this.diaSeleccionado) {
       this.mostrarDia = true;
     } else {
@@ -334,4 +336,18 @@ export class TurnosComponent implements OnInit {
     }
     this.mostrarHorario = true;
   }
+
+  descontarTurnosTomados() {
+    if (this.diaSeleccionado) {
+      const turnoFecha = `${this.diaSeleccionado.dia} ${this.diaSeleccionado.fecha}`;
+  
+      // Iterar sobre los turnos y filtrar el horario correspondiente
+      this.turnos.forEach(turno => {
+        if (turno.dia === turnoFecha) {
+          this.horarios = this.horarios.filter(horario => horario !== turno.hora);
+        }
+      });
+    }
+  }
+  
 }
