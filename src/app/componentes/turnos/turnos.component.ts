@@ -165,26 +165,25 @@ export class TurnosComponent implements OnInit {
   }
 
   obtenerdiasFiltrados() {
-    this.generarHorarios();
     this.fireStore.obtenerDatoPorCriterio('misHorarios', 'especialista', this.especialistaSeleccionado.id).subscribe(data => {
       if (data && data.length > 0) {
         this.misHorarios = data[0].misHorarios || {};
         this.idHorarios = data[0].id || null;
+        console.log("misHorarios :", this.misHorarios);
       }
       setTimeout(() => {
         this.fireStore.obtenerDatoPorCriterio('turnos', 'especialista.id', this.especialistaSeleccionado.id).subscribe(data => {
           if (data && data.length > 0) {
             this.turnos = data || {};
+            console.log("turnos :", this.turnos);
           } else {
             console.log("No se encontraron turnos para el especialista:", this.especialistaSeleccionado.id);
           }
         // this.fechasQuincena.filter{}
-        console.log("quincena: ", this.fechasQuincena);
-        // .filter{}
-        console.log("horarios :", this.horarios);
-        console.log("misHorarios :", this.misHorarios);
-        console.log("turnos :", this.turnos);
-        this,this.calcularQuincena();
+        
+        
+        this.calcularQuincena();
+        this.generarHorarios();
       })  }, 1000);      
     });
   }
@@ -193,18 +192,50 @@ export class TurnosComponent implements OnInit {
     const intervalosMinutos = 30;
     const horaInicio = 9;
     const horaFin = 18;
-
+  
     this.horarios = [];
-
+  
     // Genera los horarios disponibles
     for (let hora = horaInicio; hora < horaFin; hora++) {
       for (let minutos = 0; minutos < 60; minutos += intervalosMinutos) {
-        const horaFormateada = hora < 10 ? `0${hora}` : `${hora}`;
-        const minutosFormateados = minutos < 10 ? `0${minutos}` : `${minutos}`;
-        let horario = `${horaFormateada}:${minutosFormateados}`;
-          this.horarios.push(horario);
+        const horaFormateada = hora < 10 ? `${hora}` : `${hora}`;
+        const minutosFormateados = minutos === 0 ? '00' : `${minutos}`;
+        const horaCompleta = `${horaFormateada}:${minutosFormateados}`;
+  
+        const horario12h = this.formatoHora12(hora, minutos); // Formato 12 horas
+  
+        // Verifica si el horario está disponible en misHorarios
+        if(this.misHorarios){
+          if (this.horarioDisponibleEnMisHorarios(horario12h)) {
+            this.horarios.push(horario12h);
+          } 
+        } else {this.horarios.push(horario12h);}
       }
     }
+  }
+  
+  formatoHora12(hora: number, minutos: number): string {
+    const ampm = hora < 12 ? 'AM' : 'PM';
+    const hora12 = hora % 12 || 12; // Convierte la hora a formato 12 horas
+    const horaFormateada = hora12 < 10 ? `${hora12}` : `${hora12}`;
+    const minutosFormateados = minutos === 0 ? '00' : `${minutos}`;
+    return `${horaFormateada}:${minutosFormateados} ${ampm}`;
+  }
+  
+  horarioDisponibleEnMisHorarios(horario: string): boolean {
+    // Verifica si el horario está presente en misHorarios
+    for (const dia in this.misHorarios) {
+      if (this.misHorarios.hasOwnProperty(dia)) {
+        const horariosDia = this.misHorarios[dia];
+        for (const hora of horariosDia) {
+          console.log("const hora: ", hora);
+          if (hora === horario) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   calcularQuincena() {
