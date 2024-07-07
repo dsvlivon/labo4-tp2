@@ -10,11 +10,12 @@ import { AuthService } from '../../services/auth.service';
 import { HabilitarUsuariosComponent } from '../habilitar-usuarios/habilitar-usuarios.component';
 import { RegistroComponent } from '../registro/registro.component';
 import { MisTurnosComponent } from '../mis-turnos/mis-turnos.component';
+import { SaludoPipe } from '../../pipes/saludo.pipe';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent, RegistroComponent, MisTurnosComponent],
+  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent, RegistroComponent, MisTurnosComponent, SaludoPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

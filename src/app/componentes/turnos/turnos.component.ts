@@ -223,7 +223,6 @@ export class TurnosComponent implements OnInit {
   }
   
   horarioDisponibleEnMisHorarios(horario: string): boolean {
-    // Verifica si el horario está presente en misHorarios
     for (const dia in this.misHorarios) {
       if (this.misHorarios.hasOwnProperty(dia)) {
         const horariosDia = this.misHorarios[dia];

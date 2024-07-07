@@ -27,4 +27,43 @@ mat-grid-tile {
   th{
     background-color: rgb(101, 149, 189)
   }
+
+  .btn-foto {
+    width: 80px;
+    height: 80px;
+    max-width: 80px;
+    max-height: 80px;
+    margin-bottom: 5px;
+    border-radius: 10%;
+    object-fit: cover;
+    border-radius: 20%;
+  }
   
+  .btn-foto + p {
+    margin: 0;
+    color: #333;
+    text-align: center;
+  }
+  
+  .botones-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 5%;
+    padding-left: 5%;
+    background-color: lightgray;
+  }
+
+  .botones-wrapper > div {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+  }
+
+  .botones-wrapper mat-icon {
+      margin-right: 8px; 
+  }
+
+  .botones-wrapper p {
+      margin: 0;
+  }

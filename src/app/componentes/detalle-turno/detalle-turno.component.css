@@ -185,3 +185,22 @@
     text-align: center;
   }
   
+  .acciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .acciones > div {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+  }
+
+  .acciones mat-icon {
+      margin-right: 8px; 
+  }
+
+  .acciones p {
+      margin: 0;
+  }

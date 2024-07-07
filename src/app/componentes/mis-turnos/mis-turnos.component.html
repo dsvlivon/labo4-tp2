@@ -1,4 +1,29 @@
 <!-- <p>mis-turnos works!</p> -->
+<div class="botones-wrapper">
+    Refrescar:
+    <button (click)="refrescar()" class="btn-filtros">
+        <img  [src]="obtenerImagen('refrescar')" alt="Paciente 1" class="btn-foto">
+        <p>Refrescar: </p>
+    </button>
+
+    Especialidades:
+    <button *ngFor="let item of filtroEspecialidad" (click)="seleccionarEspecialidad(item)" class="btn-filtros">
+        <img [src]="obtenerImagen(item)" alt="{{ item }}" class="btn-foto">
+        <p>{{ item }}</p>
+    </button>
+    Especialistas:
+    <button *ngFor="let item of filtroEspecialista" (click)="seleccionarEspecialista(item)" class="btn-filtros">
+        <img [src]="item.imagen1" alt="Especialista 1" class="btn-foto">
+        <p>{{ item.nombre }} {{ item.apellido }}</p>
+    </button>
+
+    Pacientes:
+    <button *ngFor="let item of filtroPaciente" (click)="seleccionarPaciente(item)" class="btn-filtros">
+        <img [src]="item.imagen1" alt="Paciente 1" class="btn-foto">
+        <p>{{ item.nombre }} {{ item.apellido }}</p>
+    </button>
+
+</div>
 <table mat-table [dataSource]="turnos" style ="background-color: darkslategrey" class="mat-elevation-z8">
     <ng-container matColumnDef="Estado">
         <th mat-header-cell *matHeaderCellDef> Estado </th>

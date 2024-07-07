@@ -4,9 +4,9 @@
         <a (click)="goHome()"><img class="logo scale-up-center" src="https://github.com/dsvlivon/imagenes/blob/main/DV_logo.png?raw=true" alt="Logo"></a>       
     </div>
 
-    <div style= "align-items: right; ; margin-left: 40%; margin-top:1%; display: flex; flex-direction: flex-end; font-style: italic; color: darkblue; font-size: medium;">
-        <p >Hola {{this.usuario.nombre}} {{this.usuario.apellido}}</p>
-    </div>
+    <div style="align-items: right; margin-left: 40%; margin-top:1%; display: flex; flex-direction: flex-end; font-style: italic; color: darkblue; font-size: medium;">
+        <p>{{ this.usuario | saludo }}</p>
+      </div>
     
     <div class="der">
         <ul class="nav-links">
@@ -25,7 +25,7 @@
     
 </mat-toolbar>
 
-<div *ngIf="mostrarHabilitar">
+<div *ngIf="mostrarHabilitar">2
     <app-habilitar-usuarios></app-habilitar-usuarios>
 </div>
 
