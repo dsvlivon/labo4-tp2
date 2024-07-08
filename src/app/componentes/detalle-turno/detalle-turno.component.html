@@ -21,7 +21,6 @@
 
         </div>
 
-
         <div *ngIf="mostrarBotones">
             <button class="btn-76" (click)="InteractuarTurno(accion)">{{accionBoton}}</button>
         </div>
@@ -71,6 +70,12 @@
                 </button>                
             </div>
 
+            <div *ngIf="mostrarHacerHistoria">
+                <button (click)="historia()" class="btn-google">
+                    Historia Clinica
+                </button>                
+            </div>
+
             <div class="star-rating" *ngIf="mostrarCalificar">
                 <mat-icon 
                   *ngFor="let star of stars; index as i"
@@ -105,4 +110,56 @@
       </form>
     </div>
 </div>
+
+<div class="modal-overlay" *ngIf="mostrarHistoria">
+    <div class="modal-content">
+      <h2>Historia Clínica</h2>
+      <form [formGroup]="formHistoria" (ngSubmit)="guardarHistoria()" class="btn-google">
+        <div class="mb-3">
+          <label class="form-label">Altura: </label>
+          <input type="number" class="form-control" formControlName="altura">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Peso: </label>
+          <input type="number" class="form-control" formControlName="peso">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Temperatura: </label>
+          <input type="number" class="form-control" formControlName="temperatura">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Presión: </label>
+          <input type="number" class="form-control" formControlName="presion">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Clave: </label>
+          <input type="text" class="form-control" formControlName="clave1">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Valor: </label>
+            <input type="text" class="form-control" formControlName="value1">
+        </div>  
+        <div class="mb-3">
+          <label class="form-label">Clave: </label>
+          <input type="text" class="form-control" formControlName="clave2">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Valor: </label>
+          <input type="text" class="form-control" formControlName="value2">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Clave: </label>
+            <input type="text" class="form-control" formControlName="clave3">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Valor: </label>
+            <input type="text" class="form-control" formControlName="value3">
+        </div>
+  
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </form>
+    </div>
+  </div>
+  
   

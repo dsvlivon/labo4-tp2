@@ -31,6 +31,8 @@ export class HomeComponent implements OnInit{
   @Input() mostrarSpinner: any;
   authSrv = inject(AuthService);
 
+  mostrarPacientes: boolean = false;
+  mostrarIconoPacientes: boolean = false;
 
   constructor(
     private fireStore: FirebaseService,
@@ -54,6 +56,7 @@ export class HomeComponent implements OnInit{
         if(this.usuario.tipoUsuario === 'especialista') {
           this.mostrarTurnos = false;
           this.mostrarMisTurnos = true;
+          this.mostrarIconoPacientes = true;
         }
       }
       // console.log('Usuariox:', this.usuario);
@@ -94,6 +97,10 @@ export class HomeComponent implements OnInit{
    this.mostrarHabilitar = !this.mostrarHabilitar;
    this.mostrarRegistro = !this.mostrarHabilitar;
   }
+
+  goPacientes() {
+    this.mostrarPacientes = !this.mostrarPacientes  ;
+   }
 
   goRegistro() {
     // this.router.navigateByUrl('/registro', { replaceUrl: true });
