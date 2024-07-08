@@ -11,17 +11,21 @@
         <img [src]="obtenerImagen(item)" alt="{{ item }}" class="btn-foto">
         <p>{{ item }}</p>
     </button>
-    Especialistas:
-    <button *ngFor="let item of filtroEspecialista" (click)="seleccionarEspecialista(item)" class="btn-filtros">
-        <img [src]="item.imagen1" alt="Especialista 1" class="btn-foto">
-        <p>{{ item.nombre }} {{ item.apellido }}</p>
-    </button>
+    <div *ngIf="mostrarFiltroEspecialista">
+        Especialistas:
+        <button *ngFor="let item of filtroEspecialista" (click)="seleccionarEspecialista(item)" class="btn-filtros">
+            <img [src]="item.imagen1" alt="Especialista 1" class="btn-foto">
+            <p>{{ item.nombre }} {{ item.apellido }}</p>
+        </button>
+    </div>
 
-    Pacientes:
-    <button *ngFor="let item of filtroPaciente" (click)="seleccionarPaciente(item)" class="btn-filtros">
-        <img [src]="item.imagen1" alt="Paciente 1" class="btn-foto">
-        <p>{{ item.nombre }} {{ item.apellido }}</p>
-    </button>
+    <div *ngIf="mostrarFiltroPaciente">
+        Pacientes:
+        <button *ngFor="let item of filtroPaciente" (click)="seleccionarPaciente(item)" class="btn-filtros">
+            <img [src]="item.imagen1" alt="Paciente 1" class="btn-foto">
+            <p>{{ item.nombre }} {{ item.apellido }}</p>
+        </button>
+    </div>
 
 </div>
 <table mat-table [dataSource]="turnos" style ="background-color: darkslategrey" class="mat-elevation-z8">
@@ -65,4 +69,5 @@
     <tr mat-row *matRowDef="let obj; columns: columnas;" (click)="emitirDetalles(obj)"></tr>
 </table>
 
-<app-detalle-turno [obj]="selectedObj" *ngIf="mostrarDetalle"></app-detalle-turno>
+<app-detalle-turno [obj]="selectedObj" *ngIf="mostrarDetalle && selectedObj"></app-detalle-turno>
+

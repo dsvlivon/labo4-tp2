@@ -74,6 +74,22 @@
                 </button>
             </div>
         </div>
+        <div style="margin-top: 40px;"></div> <!-- DIVIDER-->
+
+        <div *ngIf="esAdmin" class="selector-group">
+            <div class="text-display" *ngIf="mostrarDia">
+                <h3>Seleccione el Paciente:</h3>
+            </div>
+            <div>
+                <select [(ngModel)]="pacienteSeleccionado" [ngModelOptions]="{ standalone: true }">
+                  <option value="" disabled selected>Seleccione Paciente</option>
+                  <option *ngFor="let item of pacientes " [ngValue]="item">{{ item.nombre }} {{ item.apellido }} - OS: {{ item.obraSocial }}</option>
+                </select>
+              </div>
+              
+              
+        </div>
+
         <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
 
         <div class="resumen">

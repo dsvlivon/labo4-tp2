@@ -51,12 +51,13 @@ export class FirebaseService {
     });
   }
 
-  actualizarTurnos(coleccion: string, id: string, estado: string, comentario?: string) {
+  actualizarTurnos(coleccion: string, id: string, estado: string, comentario?: string, resena?: string, rate?: number, encuesta?: any) {
     const dataRef = doc(this.fireStore, coleccion, id);
     const updateData: any = { estado };
-    if (comentario) {
-      updateData.comentario = comentario;
-    }
+    if (comentario != "") { updateData.comentario = comentario; }
+    if (resena != "") { updateData.resena = resena; }
+    if (rate != 999) { updateData.calificacion = rate; }
+    if (encuesta != null) { updateData.encuesta = encuesta; }
     return updateDoc(dataRef, updateData);
   }
 

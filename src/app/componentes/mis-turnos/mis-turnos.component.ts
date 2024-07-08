@@ -43,6 +43,9 @@ export class MisTurnosComponent implements OnInit {
   especialistaSeleccionado: any;
   pacienteSeleccionado: any;
 
+  mostrarFiltroPaciente: boolean = false;
+  mostrarFiltroEspecialista: boolean = false;
+
   constructor(
     private fireStore: FirebaseService,
     private tiempo: TiempoService
@@ -63,10 +66,21 @@ export class MisTurnosComponent implements OnInit {
     this.fireStore.obtenerDato('turnos').subscribe(respuesta => {
       this.turnos = respuesta;
       // console.log("turnos: ", this.turnos);
+      if(this.usuario.tipoUsuario === 'paciente'){ 
+        this.mostrarFiltroEspecialista = true; 
+        this.turnos = this.turnos.filter(item => item.paciente.id === this.usuario.id);
+      } else if(this.usuario.tipoUsuario === 'especialista'){ 
+        this.turnos = this.turnos.filter(item => item.especialista.id === this.usuario.id);
+        this.mostrarFiltroPaciente = true;
+      } else { 
+        this.mostrarFiltroEspecialista = true; 
+      }
+
+      
       this.cargarFiltros();
-      console.log("especialidad: ", this.filtroEspecialidad);
-      console.log("especialista: ", this.filtroEspecialista);
-      console.log("paciente: ", this.filtroPaciente);
+      // console.log("especialidad: ", this.filtroEspecialidad);
+      // console.log("especialista: ", this.filtroEspecialista);
+      // console.log("paciente: ", this.filtroPaciente);
     });
   }
 
@@ -76,7 +90,10 @@ export class MisTurnosComponent implements OnInit {
 
   emitirDetalles(obj: any) {
     this.selectedObj = obj;
-    this.mostrarDetalle = true;
+    this.mostrarDetalle = false;
+    setTimeout(() => {
+      this.mostrarDetalle = true;
+    }, 0);
   }
 
   cargarFiltros() {
@@ -102,25 +119,30 @@ export class MisTurnosComponent implements OnInit {
     this.especialidadSeleccionada = obj;
     // this.turnos = this.auxTurnos;
     this.turnos = this.auxTurnos.filter(item => item.especialidad === obj);
+    this.selectedObj = null;
+    this.mostrarDetalle = false;
   }
   
   seleccionarEspecialista(obj: any) {
     this.especialistaSeleccionado = obj;
     // this.turnos = this.auxTurnos;
-     this.turnos = this.auxTurnos.filter(item => item.especialista.id === obj.id);
+    this.turnos = this.auxTurnos.filter(item => item.especialista.id === obj.id);
+    this.selectedObj = null;
+    this.mostrarDetalle = false;
   }
 
   seleccionarPaciente(obj: any) {
     this.pacienteSeleccionado = obj;
     // this.turnos = this.auxTurnos;
-    this.turnos = this.auxTurnos.filter(item => {
-      // console.log('Comparing:', item.especialista.id, 'with', obj.id);
-      return item.paciente.id === obj.id;
-    });
+    this.turnos = this.auxTurnos.filter(item => item.paciente.id === obj.id);
+    this.selectedObj = null;
+    this.mostrarDetalle = false;
   }
 
   refrescar(){
     this.turnos = this.auxTurnos;
+    this.selectedObj = null;
+    this.mostrarDetalle = false;
   }
 
   obtenerImagen(val: string) {

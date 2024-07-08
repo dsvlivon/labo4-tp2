@@ -20,36 +20,89 @@
             </div>
 
         </div>
-        <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-        <!-- <input type="text" id="comentario" [(ngModel)]="comentario"> -->
 
-        <div *ngIf="mostrarCompletar">
-            <p>Desea dejar alguna reseña sobre el paciente?</p>
-            <input type="text" id="resena" [(ngModel)]="resena"
-                style="width: 90%; height: 50px; margin-left: 20px;">
-            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-            <button class="btn-76" (click)="InteractuarTurno('Realizado')">Completar</button>
+
+        <div *ngIf="mostrarBotones">
+            <button class="btn-76" (click)="InteractuarTurno(accion)">{{accionBoton}}</button>
         </div>
 
-        <div *ngIf="mostrarCancelar">
-            <p>Desea dejar algún comentario al respecto?</p>
-            <input type="text" id="comentario" [(ngModel)]="comentario"
-                style="width: 90%; height: 50px; margin-left: 20px;">
-            <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-            <button class="btn-76" (click)="InteractuarTurno('Cancelado')">Cancelar</button>
-        </div>
-
-        <div *ngIf="mostrarHabilitar">
-            <button class="btn-76" (click)="InteractuarTurno('Aprobado')">Aprobar</button>
+        <div *ngIf="mostrarOtrosBotones">
+            <button class="btn-76" (click)="InteractuarTurno(accion)">{{accionBoton}}</button>
+            <!-- <button class="btn-76" (click)="InteractuarTurno('Rechazado')">RECHAZAR</button>
+            <button class="btn-76" (click)="InteractuarTurno('Cancelado')">CANCELAR</button> -->
+            <button class="btn-76" (click)="interactuarComentarios('Rechazado')">RECHAZAR</button>
+            <button class="btn-76" (click)="interactuarComentarios('Cancelado')">CANCELAR</button>
         </div>
 
         <div class="acciones">
-            <div *ngIf="mostrarResena">
-                <mat-icon>add_comment</mat-icon>
-                <div *ngIf="mostrarResena"><p>Comentario: {{this.obj.comentario}}</p></div>
+            
+            <div *ngIf="mostrarResena" class="comentario-line">
+                <p>Reseña del medico: {{this.obj.resena}}</p>
             </div>
-            <div *ngIf="mostrarEncuesta"><mat-icon>poll</mat-icon>Completar Encuesta</div>
-            <div *ngIf="mostrarCalificar"><mat-icon>star_half</mat-icon>Calificar Atención</div>
-        </div>
+
+            <div *ngIf="mostrarComentario" class="comentario-line">
+                <p>Comentario del paciente: {{this.obj.comentario}}</p>
+            </div>
         
+        </div>
+
+        <div *ngIf="mostrarDejarComment" style="margin-top: 20px;">
+            <p>{{mensaje}}</p>
+            <input type="text" id="comentario" [(ngModel)]="comentario"
+                style="width: 90%; height: 50px; margin-left: 20px;">
+        </div>
+        <div *ngIf="mostrarDejarResena" style="margin-top: 20px;">
+            <p>{{mensaje}}</p>
+            <input type="text" id="comentario" [(ngModel)]="resena"
+                style="width: 90%; height: 50px; margin-left: 20px;">
+        </div>
+
+        <div class="acciones-container">
+
+            <div *ngIf="mostrarHacerEncuesta" class="accion-item">
+                <button (click)="encuestar()" class="btn btn-info btn-google">
+                    Completar Encuesta
+                </button>                
+            </div>
+            
+            <div *ngIf="mostrarHacerCalificar" class="accion-item">
+                <button (click)="calificar()" class="btn-google">
+                    Calificar Atención
+                </button>                
+            </div>
+
+            <div class="star-rating" *ngIf="mostrarCalificar">
+                <mat-icon 
+                  *ngFor="let star of stars; index as i"
+                  [ngClass]="{'star-selected': i < rating}"
+                  (click)="rate(i + 1)">
+                  {{ i < rating ? 'star' : 'star_border' }}
+                </mat-icon>
+                <button class="btn-google" (click)="InteractuarTurno('Calificado')">Guardar</button> 
+            </div>    
+        </div>
     </div>
+
+</div>
+
+<!-- <app-detalle-turno [obj]="selectedObj" *ngIf="mostrarDetalle && selectedObj"></app-detalle-turno> -->
+
+<div class="modal-overlay" *ngIf="mostrarEncuesta">
+    <div class="modal-content">
+      <h2>Encuesta de Satisfacción de Atención</h2>
+  
+      <form #encuestaForm="ngForm">
+        <div class="question" *ngFor="let pregunta of preguntas">
+          <label [for]="pregunta">{{ pregunta }}</label>
+          <select [id]="pregunta" [(ngModel)]="encuesta[pregunta]" [name]="pregunta" required>
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option *ngFor="let respuesta of respuestas" [value]="respuesta">{{ respuesta }}</option>
+          </select>
+        </div>
+  
+        <button (click)="guardarEncuesta()" class="btn-google">Guardar</button>
+        <button (click)="cancelarEncuesta()" class="btn-google">Cancelar</button>
+      </form>
+    </div>
+</div>
+  

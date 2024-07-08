@@ -25,6 +25,7 @@ export class TurnosComponent implements OnInit {
   horarioSeleccionado: any;
   especialistaSeleccionado: any;
   especialidadSeleccionada: any;
+  pacienteSeleccionado: any;
 
   mostrarEspecialidad: boolean = false;
   mostrarEspecialista: boolean = false;
@@ -46,11 +47,13 @@ export class TurnosComponent implements OnInit {
   especialidades: string[] = [];
   especialistas: any[] = [];
   turnos: any[] = [];
+  pacientes: any[] = [];
 
   dias: string[] = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
   email: any = "";
   usuario: any;
   esAdmin: boolean = false;
+  tipoUsuario: string = "";
 
   idHorarios = "";
   misHorarios: { [key: string]: any[] } = {};
@@ -72,10 +75,12 @@ export class TurnosComponent implements OnInit {
     this.email = localStorage.getItem('user');
     this.fireStore.obtenerDatoPorCriterio('usuarios', 'email', this.email).subscribe(data => {
       this.usuario = data[0];
+      this.tipoUsuario = this.usuario.tipoUsuario;
       console.log('Usuario:', this.usuario);
     });
 
     this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
+      this.pacientes = respuesta.filter(usuario => usuario.tipoUsuario === 'paciente');
       this.listaEspecialistas = respuesta.filter(usuario => usuario.tipoUsuario === 'especialista' && usuario.estadoAcceso === 'aprobado');
       this.auxListaEspecialistas = this.listaEspecialistas;
       // console.log("especialistas: ", this.listaEspecialistas);
@@ -257,7 +262,6 @@ export class TurnosComponent implements OnInit {
       diasTotales++; // Avanza al siguiente día en cualquier caso
     }
   }
-   
 
   estaSeleccionado(obj: any): boolean {
     // Lógica para verificar si el especialista está seleccionado
@@ -274,14 +278,19 @@ export class TurnosComponent implements OnInit {
 
   confirmarTurno() {
     if (this.especialidadSeleccionada && this.especialistaSeleccionado && this.diaSeleccionado && this.horarioSeleccionado) {
+      var paciente: any;
+      if(this.esAdmin){ paciente = this.pacienteSeleccionado; } 
+      else { paciente = this.usuario; }
+
       const obj: Turnos = {
         especialidad: this.especialidadSeleccionada,
         especialista: this.especialistaSeleccionado,
         dia: `${this.diaSeleccionado.dia} ${this.diaSeleccionado.fecha}`,
         hora: this.horarioSeleccionado,
         estado: 'Pendiente', // por default
-        paciente: this.usuario
+        paciente: paciente
       };
+      
       this.fireStore.setData(obj, 'turnos');
       console.log('Nuevo turno creado:', obj);
       this.showCartelin();
@@ -321,6 +330,8 @@ export class TurnosComponent implements OnInit {
     } else {
       this.mostrarHorario = false;
     }
+
+    if(this.tipoUsuario == "admin") { this.esAdmin = true; }
   }
 
   seleccionarDia(val: any) {
@@ -348,5 +359,8 @@ export class TurnosComponent implements OnInit {
       });
     }
   }
-  
+
+  seleccionarPaciente() {
+    console.log('Paciente seleccionado:', this.pacienteSeleccionado);
+  }
 }

@@ -21,17 +21,21 @@ export class EstadoTurnoDirective implements OnChanges {
     this.el.nativeElement.style.height = '70px';
     this.el.nativeElement.style.marginTop = '20px';
     this.el.nativeElement.style.color = 'white';
+    this.el.nativeElement.style.fontWeight = 'bold';
 
-    if (this.appEstadoTurno === 'Aprobado') {
+    if (this.appEstadoTurno === 'Pendiente') {
+      this.el.nativeElement.style.backgroundColor = 'yellow';
+      this.el.nativeElement.style.color = 'black';
+    } else if (this.appEstadoTurno === 'Aceptado') {
       this.el.nativeElement.style.backgroundColor = 'green';
-    } else if (this.appEstadoTurno === 'Pendiente') {
-      this.el.nativeElement.style.backgroundColor = 'orange';
-    } else if (this.appEstadoTurno === 'Realizado') {
+    } else if (this.appEstadoTurno === 'Realizado') { 
       this.el.nativeElement.style.backgroundColor = 'blue';
+    } else if (this.appEstadoTurno === 'Rechazado') {
+      this.el.nativeElement.style.backgroundColor = 'orange';
     } else if (this.appEstadoTurno === 'Cancelado') {
     this.el.nativeElement.style.backgroundColor = 'red';  
     } else { 
-      this.el.nativeElement.style.backgroundColor = '';
+      this.el.nativeElement.style.backgroundColor = 'white';
     }
   }
 }
