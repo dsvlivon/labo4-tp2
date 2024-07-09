@@ -1,0 +1,21 @@
+<div class="cards-container">
+  <div *ngFor="let paciente of pacientes" class="card">
+    <img [src]="paciente.imagen1" alt="{{ paciente.nombre }}" class="card-img-top">
+    <div class="card-body">
+      <h5 class="card-title">{{ paciente.nombre }} {{ paciente.apellido }}</h5>
+      <p class="card-text">DNI: {{ paciente.dni }}</p>
+      <p class="card-text">Edad: {{ paciente.edad }}</p>
+      <p class="card-text">Email: {{ paciente.email }}</p>
+      <p class="card-text">Obra Social: {{ paciente.obraSocial }}</p>
+      <h6>Últimos 3 turnos:</h6>
+      <ul>
+        <li *ngFor="let turno of obtenerUltimosTurnos(paciente)">{{ turno.dia }}</li>
+      </ul>
+    </div>
+    <div class="accion-item" *ngIf="paciente.historiaClinica">
+      <button (click)="historia(paciente.id)" class="btn-google">
+        Historia Clínica
+      </button>
+    </div>
+  </div>
+</div>

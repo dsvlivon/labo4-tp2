@@ -20,47 +20,90 @@ import { EstadoAccesoDirective } from '../../directivas/estado-acceso.directive'
 })
 export class HabilitarUsuariosComponent implements OnInit {
   @Output() peliculaSeleccionada = new EventEmitter<any>();
-  displayedColumnasPacientes: string[] = [ 'Estado Acceso', 'Tipo de Usuario', 'Foto', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Obra Social'];
-  displayedColumnasEspecialista: string[] = [ 'Estado Acceso', 'Tipo de Usuario', 'Foto', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Especialidad'];
-  lista: Usuario[] = [];
-  lista2: Usuario[] = [];
-  dataSource: Usuario[] = [];
+  displayedColumnasAdmins: string[] =       ['Estado Acceso', 'Tipo de Usuario', 'Foto', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email'];
+  displayedColumnasEspecialista: string[] = ['Estado Acceso', 'Tipo de Usuario', 'Foto', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Especialidad'];
+  displayedColumnasPacientes: string[] =    ['Estado Acceso', 'Tipo de Usuario', 'Foto', 'Nombre', 'Apellido', 'Dni', 'Edad', 'Email', 'Obra Social'];
+  admins: any[] = [];
+  pacientes: any[] = [];
+  especialistas: any[] = [];
   selectedUsuario: Usuario | null = null;
   mostrarDetalle: boolean = false;
 
-  constructor(private fireStore: FirebaseService) {}
+  mostrarEspecialistas: boolean = false;
+  mostrarPacientes: boolean = false;
+  mostrarAdmins: boolean = false;
+  botonSeleccionado: string = '';
+
+  @Output() historiaSeleccionada = new EventEmitter<string>();
+
+  constructor(private fireStore: FirebaseService) { }
 
   ngOnInit(): void { this.getDatos(); }
 
   getDatos() {
     this.fireStore.obtenerDato('usuarios').subscribe(respuesta => {
-      this.lista = respuesta
-        .map(usuario => {
-          if (usuario.imagen1) {
-            usuario.imagen1 = this.arreglarImagenes(usuario.imagen1);
-          }
-          return usuario;
-          }).filter(usuario => usuario.tipoUsuario === 'especialista' || usuario.tipoUsuario === 'admin');
-      //aplicar Criterios de filtros -> logica de codigo (la otra opcion es pasar criterios a la query p usar el motor del sql d fb)
-      this.dataSource = this.lista;
-
-      this.lista2 = respuesta
-      .map(usuario => {
+      this.especialistas = respuesta.map(usuario => {
         if (usuario.imagen1) {
           usuario.imagen1 = this.arreglarImagenes(usuario.imagen1);
         }
         return usuario;
-        }).filter(usuario => usuario.tipoUsuario === 'paciente');
-      // this.dataSource2 = this.lista;
+      }).filter(usuario => usuario.tipoUsuario === 'especialista');
+
+      this.pacientes = respuesta.map(usuario => {
+        if (usuario.imagen1) {
+          usuario.imagen1 = this.arreglarImagenes(usuario.imagen1);
+        }
+        return usuario;
+      }).filter(usuario => usuario.tipoUsuario === 'paciente');
+
+      this.admins = respuesta.map(usuario => {
+        if (usuario.imagen1) {
+          usuario.imagen1 = this.arreglarImagenes(usuario.imagen1);
+        }
+        return usuario;
+      }).filter(usuario => usuario.tipoUsuario === 'admin');
     });
   }
-  
+
   arreglarImagenes(url: string): string {
     return url.replace(/'/g, '"');
   }
-  
+
   emitirDetalles(obj: any) {
     this.selectedUsuario = obj;
     this.mostrarDetalle = true;
+  }
+
+
+  verPacientes(){
+    this.mostrarPacientes = !this.mostrarPacientes;
+    this.botonSeleccionado = 'pacientes';
+  }
+  verEspecialistas(){
+    this.mostrarEspecialistas = !this.mostrarEspecialistas;
+    this.botonSeleccionado = 'especialistas';
+  }
+  verAdmins(){
+    this.mostrarAdmins = !this.mostrarAdmins;
+    this.botonSeleccionado = 'admins';
+  }
+
+  seleccionarBoton(boton: string) {
+    this.botonSeleccionado = boton;
+    switch(boton) {
+      case 'pacientes':
+        this.verPacientes();
+        break;
+      case 'especialistas':
+        this.verEspecialistas();
+        break;
+      case 'admins':
+        this.verAdmins();
+        break;
+    }
+  }
+
+  emitirHistoriaSeleccionada(id: string) {
+    this.historiaSeleccionada.emit(id);
   }
 }

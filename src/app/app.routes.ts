@@ -9,6 +9,7 @@ import { authGuard } from './guards/auth.guard';
 import { TurnosComponent } from './componentes/turnos/turnos.component';
 import { MiPerfilComponent } from './componentes/mi-perfil/mi-perfil.component';
 import { MisTurnosComponent } from './componentes/mis-turnos/mis-turnos.component';
+import { HistoriaClinicaComponent } from './componentes/historia-clinica/historia-clinica.component';
 
 
 
@@ -23,4 +24,5 @@ export const routes: Routes = [
     { path: 'turnos', component: TurnosComponent },
     { path: 'misTurnos', component: MisTurnosComponent },
     { path: 'miPerfil', component: MiPerfilComponent },
+    { path: 'historiaClinica', component: HistoriaClinicaComponent },
 ];

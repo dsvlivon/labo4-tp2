@@ -34,58 +34,43 @@
         </div>
 
         <div class="acciones">
-            
-            <div *ngIf="mostrarResena" class="comentario-line">
-                <p>Reseña del medico: {{this.obj.resena}}</p>
-            </div>
-
-            <div *ngIf="mostrarComentario" class="comentario-line">
-                <p>Comentario del paciente: {{this.obj.comentario}}</p>
-            </div>
-        
-        </div>
-
-        <div *ngIf="mostrarDejarComment" style="margin-top: 20px;">
-            <p>{{mensaje}}</p>
-            <input type="text" id="comentario" [(ngModel)]="comentario"
-                style="width: 90%; height: 50px; margin-left: 20px;">
-        </div>
-        <div *ngIf="mostrarDejarResena" style="margin-top: 20px;">
-            <p>{{mensaje}}</p>
-            <input type="text" id="comentario" [(ngModel)]="resena"
-                style="width: 90%; height: 50px; margin-left: 20px;">
-        </div>
-
-        <div class="acciones-container">
-
-            <div *ngIf="mostrarHacerEncuesta" class="accion-item">
-                <button (click)="encuestar()" class="btn btn-info btn-google">
-                    Completar Encuesta
-                </button>                
-            </div>
-            
-            <div *ngIf="mostrarHacerCalificar" class="accion-item">
-                <button (click)="calificar()" class="btn-google">
-                    Calificar Atención
-                </button>                
-            </div>
-
-            <div *ngIf="mostrarHacerHistoria">
-                <button (click)="historia()" class="btn-google">
-                    Historia Clinica
-                </button>                
-            </div>
-
-            <div class="star-rating" *ngIf="mostrarCalificar">
-                <mat-icon 
-                  *ngFor="let star of stars; index as i"
-                  [ngClass]="{'star-selected': i < rating}"
-                  (click)="rate(i + 1)">
-                  {{ i < rating ? 'star' : 'star_border' }}
-                </mat-icon>
-                <button class="btn-google" (click)="InteractuarTurno('Calificado')">Guardar</button> 
-            </div>    
-        </div>
+          <div *ngIf="mostrarResena" class="comentario-line">
+              <p>Reseña del medico: {{this.obj.resena}}</p>
+          </div>
+          <div *ngIf="mostrarComentario" class="comentario-line">
+              <p>Comentario del paciente: {{this.obj.comentario}}</p>
+          </div>
+      </div>
+      
+      <div class="acciones-container">
+          <div *ngIf="mostrarHacerEncuesta" class="accion-item">
+              <button (click)="encuestar()" class="btn-google">
+                  Completar Encuesta
+              </button>                
+          </div>
+          
+          <div *ngIf="mostrarHacerCalificar" class="accion-item">
+              <button (click)="calificar()" class="btn-google">
+                  Calificar Atención
+              </button>                
+          </div>
+      
+          <div *ngIf="mostrarHacerHistoria" class="accion-item">
+              <button (click)="historia()" class="btn-google">
+                  Historia Clinica
+              </button>                
+          </div>
+      
+          <div class="star-rating" *ngIf="mostrarCalificar">
+              <mat-icon 
+                *ngFor="let star of stars; index as i"
+                [ngClass]="{'star-selected': i < rating}"
+                (click)="rate(i + 1)">
+                {{ i < rating ? 'star' : 'star_border' }}
+              </mat-icon>
+              <button class="btn-google" (click)="InteractuarTurno('Calificado')">Guardar</button> 
+          </div>    
+      </div>
     </div>
 
 </div>

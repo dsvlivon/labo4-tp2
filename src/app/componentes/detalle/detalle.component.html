@@ -1,34 +1,39 @@
-<div class="modal" *ngIf="mostrarDetalle">
+<div class="modal" *ngIf="obj">
   <div class="modal-content">
+
     <span class="close" (click)="cerrarModal()">&times;</span>
+    
     <h2>Detalles del Especialista</h2>
     <h3><strong>Estado:</strong> {{ obj.estadoAcceso }}</h3>
+    
     <div *ngIf="obj" class="detalle-container">
-
       <div class="img-container">
         <img [src]="obj.imagen1" alt="{{obj.nombre}}" class="obj-pic">
       </div>
-
       <div class="info-container">
         <p>Nombre: {{ obj.nombre }}</p>
         <p>Apellido: {{ obj.apellido }}</p>
         <p>Email: {{ obj.email }}</p>
-        <p>Especialidad: {{ especialidades }}</p>
+        <p>Especialidad: {{ obj.especialidad }}</p>
         <p>Obra Social: {{ obj.obraSocial }}</p>
-        <p>Mail: {{ obj.email }}</p>
       </div>
-
     </div>
-
+    
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
-      
-    <div *ngIf="mostrarHabilitar">
+    
+    <div *ngIf="obj.estadoAcceso === 'habilitado'">
+      <button class="btn-76" (click)="Deshabilitar()">Deshabilitar</button>
+    </div>
+    
+    <div *ngIf="obj.estadoAcceso === 'deshabilitado'">
       <button class="btn-76" (click)="habilitar()">Habilitar</button>
     </div>
-    <div *ngIf="mostrarDeshabilitar">
-      <button class="btn-76" (click)="Deshabilitar()">Desabilitar</button>
+    
+    <div class="accion-item" *ngIf="obj.historiaClinica">
+      <button (click)="historia(obj.id)" class="btn-google">Historia Clínica</button>
     </div>
-
+    
     <div style="margin-top: 20px;"></div> <!-- DIVIDER-->
+    
   </div>
 </div>

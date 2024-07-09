@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -25,6 +25,9 @@ export class MiPerfilComponent implements OnInit {
   idHorarios = "";
   celdasElegidas: { [key: string]: string[] } = {};
   mostrarCartelin: boolean = false;
+  isPaciente: boolean = true;
+  @Output() historiaSeleccionada = new EventEmitter<string>();
+
 
   constructor(
     private fireStore: FirebaseService,
@@ -42,6 +45,7 @@ export class MiPerfilComponent implements OnInit {
       this.id = this.usuario.id;
       this.tipo = this.usuario.tipoUsuario;
       this.isEspecialista = (this.usuario.tipoUsuario === 'especialista');
+      this.isPaciente = (this.usuario.tipoUsuario === 'paciente');
       
       this.fireStore.obtenerDatoPorCriterio('misHorarios', 'especialista', this.id).subscribe(data => {
         if (data && data.length > 0) {
@@ -134,10 +138,11 @@ export class MiPerfilComponent implements OnInit {
       }
       
       console.log('Reserva de Horarios creada:', obj);
-      this.showCartelin();
-      
+      this.showCartelin();      
     }
   }
+
+  cancelar(){}
 
   showCartelin() {
     this.mostrarCartelin = true;
@@ -147,5 +152,8 @@ export class MiPerfilComponent implements OnInit {
     }, 2000);
   }
 
-  cancelar(){}
+  historia(id:string){
+    this.router.navigate(['/historiaClinica']);
+    this.historiaSeleccionada.emit(id);
+  }
 }

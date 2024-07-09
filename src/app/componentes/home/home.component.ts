@@ -11,11 +11,15 @@ import { HabilitarUsuariosComponent } from '../habilitar-usuarios/habilitar-usua
 import { RegistroComponent } from '../registro/registro.component';
 import { MisTurnosComponent } from '../mis-turnos/mis-turnos.component';
 import { SaludoPipe } from '../../pipes/saludo.pipe';
+import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
+import { PacientesComponent } from '../pacientes/pacientes.component';
+import { MiPerfil2Component } from '../mi-perfil2/mi-perfil2.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent, RegistroComponent, MisTurnosComponent, SaludoPipe],
+  imports: [CommonModule, MatToolbarModule, MatIconModule, MatProgressSpinnerModule, CommonModule, HabilitarUsuariosComponent, 
+    RegistroComponent, MisTurnosComponent, SaludoPipe, HistoriaClinicaComponent, PacientesComponent, MiPerfil2Component],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -31,8 +35,12 @@ export class HomeComponent implements OnInit{
   @Input() mostrarSpinner: any;
   authSrv = inject(AuthService);
 
+  mostrarMiPerfil2: boolean = false;
   mostrarPacientes: boolean = false;
   mostrarIconoPacientes: boolean = false;
+  mostrarHistoriaClinica: boolean = false;
+  pacienteElegido: string = "";
+  pacienteId: string= "";
 
   constructor(
     private fireStore: FirebaseService,
@@ -75,6 +83,12 @@ export class HomeComponent implements OnInit{
   }
   
   goHome() { 
+    this.mostrarMisTurnos = false;
+    this.mostrarHabilitar = false;
+    this.mostrarRegistro = false;
+    this.mostrarPacientes = false;
+    this.mostrarHistoriaClinica = false;
+    this.mostrarMiPerfil2 = false;
     this.router.navigate(['/home']);
   }
 
@@ -82,33 +96,74 @@ export class HomeComponent implements OnInit{
     this.router.navigateByUrl('/home', { replaceUrl: true });
   }
 
-  goEncuestas() {
-    // this.router.navigateByUrl('/home', { replaceUrl: true });
-  }
-
   goTurnos() {
     this.router.navigate(['/turnos'], { replaceUrl: true });
   }
   goMisTurnos() {
     this.mostrarMisTurnos = !this.mostrarMisTurnos;
+    
+    this.mostrarHabilitar = false;
+    this.mostrarRegistro = false;
+    this.mostrarPacientes = false;
+    this.mostrarHistoriaClinica = false;
+    this.mostrarMiPerfil2 = false;
   }
 
   goUsuarios() {
-   this.mostrarHabilitar = !this.mostrarHabilitar;
-   this.mostrarRegistro = !this.mostrarHabilitar;
+    this.mostrarHabilitar = !this.mostrarHabilitar;
+    
+    this.mostrarRegistro = false;
+    this.mostrarMisTurnos = false;
+    this.mostrarPacientes = false;
+    this.mostrarHistoriaClinica = false;
+    this.mostrarMiPerfil2 = false;
   }
 
   goPacientes() {
-    this.mostrarPacientes = !this.mostrarPacientes  ;
+    this.mostrarPacientes = !this.mostrarPacientes;
+    
+    this.mostrarMisTurnos = false;
+    this.mostrarHabilitar = false;
+    this.mostrarRegistro = false;
+    this.mostrarHistoriaClinica = false;
+    this.mostrarMiPerfil2 = false;
    }
 
   goRegistro() {
     // this.router.navigateByUrl('/registro', { replaceUrl: true });
     this.mostrarRegistro = !this.mostrarRegistro;
-    this.mostrarHabilitar = !this.mostrarRegistro;
+    
+    this.mostrarMisTurnos = false;
+    this.mostrarHabilitar = false;
+    this.mostrarPacientes = false;
+    this.mostrarHistoriaClinica = false;
+    this.mostrarMiPerfil2 = false;
   }
 
   goMiPerfil() {
-    this.router.navigateByUrl('/miPerfil', { replaceUrl: true });
+    if(this.usuario.tipoUsuario == 'especialista'){
+      this.router.navigateByUrl('/miPerfil', { replaceUrl: true });
+    } else {
+      this.mostrarMiPerfil2 = !this.mostrarMiPerfil2;
+      
+      this.mostrarMisTurnos = false;
+      this.mostrarHabilitar = false;
+      this.mostrarRegistro = false;
+      this.mostrarPacientes = false;
+      this.mostrarHistoriaClinica = false;     
+    }
   } 
+
+  mostrarHistoria(id: string) {
+    this.pacienteElegido = id;
+    this.pacienteId = id;
+    this.mostrarHistoriaClinica = !this.mostrarHistoriaClinica;
+  
+    this.mostrarPacientes = false;
+    this.mostrarMiPerfil2 = false;
+    this.mostrarMisTurnos = false;
+    this.mostrarHabilitar = false;
+    this.mostrarRegistro = false;
+  }
+
 }

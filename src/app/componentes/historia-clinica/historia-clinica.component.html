@@ -1,0 +1,46 @@
+<div class="paciente-info">
+    <!-- <span class="close" (click)="cerrarModal()">&times;</span> -->
+    <img [src]="paciente.imagen1" alt="{{ paciente.nombre }}" class="paciente-img">
+    <div class="title">
+        <h2>{{ paciente.nombre }} {{ paciente.apellido }}</h2>
+    </div>
+
+    <div class="column-left">
+        <p><strong>DNI:</strong> {{ paciente.dni }}</p>
+        <p><strong>Edad:</strong> {{ paciente.edad }}</p>
+        <p><strong>Email:</strong> {{ paciente.email }}</p>
+        <p><strong>Obra Social:</strong> {{ paciente.obraSocial }}</p>
+        <p><strong>Altura:</strong> {{ historiaClinica.altura }} m</p>
+        <p><strong>Peso:</strong> {{ historiaClinica.peso }} kg</p>
+    </div>
+    <div class="column-right">
+        <p><strong>Temperatura:</strong> {{ historiaClinica.temperatura }} °C</p>
+        <p><strong>Presión:</strong> {{ historiaClinica.presion }} mmHg</p>
+        <p>{{ historiaClinica.clave1 }} : {{ historiaClinica.value1 }}</p>
+        <div *ngIf="mostrarClave2"><p>{{ historiaClinica.clave2 }} : {{ historiaClinica.value2 }}</p></div>
+        <div *ngIf="mostrarClave3"><p>{{ historiaClinica.clave3 }} : {{ historiaClinica.value3 }}</p></div>
+    </div>
+  </div>
+  
+  <div class="atenciones">
+    <h3>Turnos Realizados</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Especialista</th>
+          <th>Especialidad</th>
+          <th>Fecha y Hora</th>
+          <th>Calificación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let atencion of atenciones">
+          <td>{{ atencion.especialista.nombre }} {{ atencion.especialista.apellido }}</td>
+          <td>{{ atencion.especialidad }}</td>
+          <td>{{ atencion.dia }} {{ atencion.hora }}</td>
+          <td>{{ atencion.calificacion || 'N/A' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

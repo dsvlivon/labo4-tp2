@@ -5,15 +5,15 @@
     background-attachment: fixed;
     background-repeat: no-repeat;
     width: 100vw;
-    height: 100vh;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .perfil-container {
-    width: 60%;
-    height: 70%;
+    width: 50%;
+    height: auto;
     margin: 0 auto;
     padding: 90px;
     border: 1px solid #ccc;

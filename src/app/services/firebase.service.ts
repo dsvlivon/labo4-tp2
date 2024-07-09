@@ -39,9 +39,17 @@ export class FirebaseService {
 
   actualizarObj(coleccion:string ,id: string, estadoAcceso: any) {
     const dataRef = doc(this.fireStore, coleccion, id);
-    updateDoc(dataRef, {
-      estadoAcceso
-    });
+    updateDoc(dataRef, { estadoAcceso });
+  }
+
+  actualizarUser(coleccion:string ,id: string, estadoAcceso: any, historiaClinica?: boolean, ) {
+    const dataRef = doc(this.fireStore, coleccion, id);
+    const updateData: any = {};
+
+    if (estadoAcceso != "") { updateData.estadoAcceso = estadoAcceso; }
+    if (historiaClinica) { updateData.historiaClinica = historiaClinica; }
+
+    return updateDoc(dataRef, updateData);    
   }
 
   actualizarHorarios(coleccion:string ,id: string, misHorarios: any) {

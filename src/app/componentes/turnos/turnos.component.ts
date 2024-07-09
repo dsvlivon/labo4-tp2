@@ -111,7 +111,7 @@ export class TurnosComponent implements OnInit {
     switch (val) {
       case "Cardiologia": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cardiologia.jpg?raw=true';
         break;
-      case "Cirujia de Coxis": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cirugia.jpg?raw=true';
+      case "Cirugia de Coxis": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/cirugia.jpg?raw=true';
         break;
       case "Medicina General": return 'https://github.com/dsvlivon/imagenes/blob/main/botones/general.jpg?raw=true';
         break;

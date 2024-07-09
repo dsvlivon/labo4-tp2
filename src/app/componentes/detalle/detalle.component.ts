@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FirebaseService } from '../../services/firebase.service';
@@ -16,10 +16,9 @@ export class DetalleComponent implements OnChanges {
   mostrarHabilitar: boolean = false;
   mostrarDeshabilitar: boolean = false;
   especialidades: string[] = [];
+  @Output() historiaSeleccionada = new EventEmitter<string>();
 
-  constructor(private fireStore: FirebaseService) {
-    // console.log("detalle!");
-  }
+  constructor(private fireStore: FirebaseService) {}
 
   ngOnChanges() {
     if(this.obj.tipoUsuario == "especialista") {
@@ -69,5 +68,10 @@ export class DetalleComponent implements OnChanges {
       console.log("Usuario deshabilitado!");
       this.cerrarModal();
     }
+  }
+
+  historia(id: string) {
+    this.historiaSeleccionada.emit(id);
+    console.log("id:", id);
   }
 }

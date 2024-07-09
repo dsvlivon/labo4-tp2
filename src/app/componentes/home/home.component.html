@@ -6,28 +6,24 @@
 
     <div style="align-items: right; margin-left: 40%; margin-top:1%; display: flex; flex-direction: flex-end; font-style: italic; color: darkblue; font-size: medium;">
         <p>{{ this.usuario | saludo }}</p>
-      </div>
+    </div>
     
     <div class="der">
         <ul class="nav-links">
             <li><a (click)="goMiPerfil()" title="Mi Perfil" *ngIf="!mostrarConfirmacion"><mat-icon>person_outline</mat-icon></a></li>
-            <!-- <li><a (click)="goEncuestas()" title="Encuestas" *ngIf="!mostrarConfirmacion"><mat-icon>equalizer</mat-icon></a></li> -->
-            
-            <li><a (click)="goRegistro()" title="Alta de Usaurios" *ngIf="esAdmin"><mat-icon>add_circle_outline</mat-icon></a></li>
-            <li><a (click)="goTurnos()" title="Solicitar Turnos" *ngIf="mostrarTurnos" ><mat-icon>event</mat-icon></a></li>
-            <li><a (click)="goMisTurnos()" title="MisTurnos" *ngIf="!mostrarConfirmacion"><mat-icon>event_available</mat-icon></a></li>
-
-            <li><a (click)="goUsuarios()" title="Usuaruis" *ngIf="esAdmin"><mat-icon>supervisor_account</mat-icon></a></li>
+            <li><a (click)="goRegistro()" title="Alta de Usuarios" *ngIf="esAdmin"><mat-icon>add_circle_outline</mat-icon></a></li>
+            <li><a (click)="goTurnos()" title="Solicitar Turnos" *ngIf="mostrarTurnos"><mat-icon>event</mat-icon></a></li>
+            <li><a (click)="goMisTurnos()" title="Mis Turnos" *ngIf="!mostrarConfirmacion"><mat-icon>event_available</mat-icon></a></li>
+            <li><a (click)="goUsuarios()" title="Usuarios" *ngIf="esAdmin"><mat-icon>supervisor_account</mat-icon></a></li>
             <li><a (click)="goPacientes()" title="Pacientes" *ngIf="mostrarIconoPacientes"><mat-icon>assignment_ind</mat-icon></a></li>
-            <li><a (click)="goHome()" title="Home" *ngIf="!mostrarConfirmacion" ><mat-icon>home</mat-icon></a></li>
+            <li><a (click)="goHome()" title="Home" *ngIf="!mostrarConfirmacion"><mat-icon>home</mat-icon></a></li>
             <li><a (click)="goLogOut()" title="Salir"><mat-icon>open_in_new</mat-icon></a></li> 
         </ul>
     </div>
-    
 </mat-toolbar>
 
 <div *ngIf="mostrarHabilitar">
-    <app-habilitar-usuarios></app-habilitar-usuarios>
+    <app-habilitar-usuarios (historiaSeleccionada)="mostrarHistoria($event)"></app-habilitar-usuarios>
 </div>
 
 <div *ngIf="mostrarRegistro">
@@ -42,4 +38,17 @@
     <div *ngIf="mostrarConfirmacion" class="confirmation-message">
       No puede realizar otras acciones hasta que su perfil sea habilitado por un Administrador.
     </div>
-</div>
+  
+    <div *ngIf="mostrarPacientes">
+      <app-pacientes (historiaSeleccionada)="mostrarHistoria($event)"></app-pacientes>
+    </div>
+  
+    <div *ngIf="mostrarHistoriaClinica">
+      <app-historia-clinica [pacienteId]="pacienteId"></app-historia-clinica>
+    </div>
+  
+    <div *ngIf="mostrarMiPerfil2">
+      <app-mi-perfil2 (historiaSeleccionada2)="mostrarHistoria($event)"></app-mi-perfil2>
+    </div>
+  </div>
+  

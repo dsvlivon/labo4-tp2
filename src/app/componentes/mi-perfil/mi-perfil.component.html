@@ -1,6 +1,6 @@
 <div class="perfil-background">
     <div class="perfil-container" *ngIf="usuario">
-        <h2>Clínica DV - Perfil de {{tipo}}</h2>
+        <h3>Clínica DV - Perfil de {{tipo}}</h3>
         <button class="close" (click)="goHome()">&times;</button>
         <div class="perfil-info">
             <div class="perfil-imagen">
@@ -19,8 +19,16 @@
             </div>
         </div>
 
+        <div *ngIf="isPaciente">
+          <div class="accion-item" *ngIf="usuario.historiaClinica">
+            <button (click)="historia(usuario.id)" class="btn-google">
+              Historia Clínica
+            </button>
+          </div>
+        </div>
+
         <div class="horarios-container" *ngIf="isEspecialista">
-            <h3>Seleccione su disponibilidad horaria</h3>
+            <h4>Seleccione su disponibilidad horaria</h4>
             <!-- <div *ngFor="let dia of dias" >{{ dia }}
                 <button *ngFor="let horario of horarios" (click)="seleccionarHorario(horario)" class="btn-horarios"
                     [ngClass]="{ 'seleccionado': estaSeleccionado(horario) }"

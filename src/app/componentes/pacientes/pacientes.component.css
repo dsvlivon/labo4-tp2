@@ -1,0 +1,52 @@
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Espacio entre las tarjetas */
+    justify-content: center; /* Centrar las tarjetas horizontalmente */
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 8px;
+    align-items: center;
+}
+
+.card-img-top {
+    width: 80%;
+    border-radius: 50%;
+    margin-left: 12.5%;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.card-title {
+    margin: 8px 0;
+}
+
+.card-text {
+    margin: 4px 0;
+}
+
+.btn-google {
+    padding: 10px 20px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+    margin-left: 27.5%;
+  }
+
+.accion-item {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}

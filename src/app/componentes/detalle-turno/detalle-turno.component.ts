@@ -3,12 +3,13 @@ import { CommonModule, formatDate } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FirebaseService } from '../../services/firebase.service';
 import { MatIconModule } from '@angular/material/icon';
+import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
 
 
 @Component({
   selector: 'app-detalle-turno',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, HistoriaClinicaComponent],
   templateUrl: './detalle-turno.component.html',
   styleUrl: './detalle-turno.component.css'
 })
@@ -158,6 +159,9 @@ export class DetalleTurnoComponent implements OnChanges, OnInit {
         this.mostrarOtrosBotones = false;
         this.mostrarBotones = false;
         this.mostrarResena = true;    
+        if(this.obj.comentario) {
+          this.mostrarComentario = true;
+        }
     
         if(this.verificarHistoria()) { 
           //aca habria q ver si el turno ya fue dejado en la historia
@@ -337,6 +341,8 @@ export class DetalleTurnoComponent implements OnChanges, OnInit {
       
       console.log("xxx: ", obj);
       this.fireStore.setData(obj, 'historiaClinica');
+
+      this.fireStore.actualizarUser('usuarios', obj.id, "", true);
     } else {
       console.log('Formulario inválido');
     }
