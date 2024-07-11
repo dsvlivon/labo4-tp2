@@ -80,3 +80,6 @@ Tanto pacientes como especialistas veran solo los turnos que los involucren a si
 
 Los admins además deberán elegir para que paciente es el turno
 ![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/turnos%20-%20seleccion%20de%20paciente.png?raw=true)
+
+Al confirmarse el turno saldrá un mensaje por pantalla con una animación
+![image]([https://github.com/dsvlivon/imagenes/blob/main/clinica/turnos%20-%20seleccion%20de%20paciente.png?raw=true](https://github.com/dsvlivon/imagenes/blob/main/clinica/msg%20confirmacion%20-%20animacion.png?raw=true))
