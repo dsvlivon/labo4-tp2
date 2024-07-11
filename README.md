@@ -2,9 +2,9 @@
 
 # ***Pantallas***
 
-### **Pantalla Bienvenido**
+### **Pantalla Bienvenido: ** Dos botones de accion para Iniciar sesión o registrarse. Información de contacto y links de redes
 ![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/bienvenid.png?raw=true)
-Dos botones de accion para Iniciar sesión o registrarse. Información de contacto y links de redes
+
 
 ### **Creación de Cliente**
 ![Login de usuarios](https://github.com/dsvlivon/imagenes/blob/main/clinica/login.png?raw=true)
