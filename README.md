@@ -40,6 +40,12 @@ Barra de opciones del paciente
 - solicitar turnos
 - ver sus turnos
 - cerrar sesión
+
+**Mi perfil** 
+Cuando un paciente ingresa a Mi Perfil, si algun especialista ya cargó su historia clínica, podrá verla desde aquí
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/mi%20perfil.png?raw=true)
+En cambio, si el usuario es un especialista, además de ver la iformación de su cuenta, también podrá gestionar sus horarios disponibles 
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/mis%20horarios.png?raw=true)
   
 Barra de opciones del administrador
 ![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/barra-admion.png?raw=true)
@@ -50,3 +56,27 @@ Barra de opciones del administrador
 - administrar los usuarios
 - cerrar sesión
 
+### **Turnos - Admin: ** 
+Los admins pueden ver todos los turnos de todos los pacientes y especialistas. Pero ademas cuentan con filtros por categoria al accionar los botones correspondientes en la barra superior
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/mis%20turnos%20-%20admin.png?raw=true)
+### **Turnos - Especialistas/Pacientes: ** 
+Tanto pacientes como especialistas veran solo los turnos que los involucren a si mismos. Además ellós cuentan con un filtro dinámico por texto.
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/mis%20turnos%20-%20esp.png?raw=true)
+- Los especialistas, veran el turno que fué solicitado y podrán aceptarlo, cancelarlo o rechazarlo, debiendo dejar una **reseña** sobre ello
+- ![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/mis%20turnos%20-%20rechazar.png?raw=true)
+- Los pacientes podrán cancelarlo, debiendo dejar un **comentario** sobre ello
+- ![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/mis%20turnos%20-%20cancelar.png?raw=true)
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/mis%20turnos%20-%20detalle.png?raw=true)
+
+**solo si un turno fue ACEPTADO, podrá ser REALIZADO y asi mismo, sólo si fué REALIZADO se podrá cargar una HISTORIA CLINICA**
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/historia%20clinica.png?raw=true)
+
+
+### **Soliciar Turnos / Todos ** 
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/turnos%20-%20seleccion%20de%20especialista.png?raw=true)
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/turnos%20-%20seleccion%20de%20especialidad.png?raw=true)
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/turnos%20-%20seleccion%20de%20dia.png?raw=true)
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/turnos%20-%20seleccion%20de%20horarios.png?raw=true)
+
+Los admins además deberán elegir para que paciente es el turno
+![image](https://github.com/dsvlivon/imagenes/blob/main/clinica/turnos%20-%20seleccion%20de%20paciente.png?raw=true)
